@@ -1,0 +1,482 @@
+[
+  {
+    "id": "6_475",
+    "image_path": "data/seedbench_dataset/images/160790_1349572849.jpg",
+    "question": "What is the position of the sink relative to the refrigerator?",
+    "options": {
+      "A": "The sink is on the left of the refrigerator",
+      "B": "The sink is behind the refrigerator",
+      "C": "The sink is in front of the refrigerator",
+      "D": "The sink is on the right of the refrigerator"
+    },
+    "ground_truth": "D",
+    "prediction": "D",
+    "correct": true,
+    "category": "Spatial Relation",
+    "level": "L1"
+  },
+  {
+    "id": "3_802",
+    "image_path": "data/seedbench_dataset/images/685587_2425951007.jpg",
+    "question": "What is the main feature of the building in the image?",
+    "options": {
+      "A": "The tall trees behind it",
+      "B": "The poster on the front of it",
+      "C": "The large mural on the side of it",
+      "D": "The brick color of the building"
+    },
+    "ground_truth": "C",
+    "prediction": "C",
+    "correct": true,
+    "category": "Instance Attributes",
+    "level": "L1"
+  },
+  {
+    "id": "3_3797",
+    "image_path": "data/seedbench_dataset/images/62539_900332620.jpg",
+    "question": "What is the material of the wall mounted message board?",
+    "options": {
+      "A": "Stone",
+      "B": "Metal",
+      "C": "Glass",
+      "D": "Wood"
+    },
+    "ground_truth": "D",
+    "prediction": "D",
+    "correct": true,
+    "category": "Instance Attributes",
+    "level": "L1"
+  },
+  {
+    "id": "2_576",
+    "image_path": "data/seedbench_dataset/images/494456_3317903433.jpg",
+    "question": "What is the main musical instrument being played in the image?",
+    "options": {
+      "A": "Guitar",
+      "B": "Piano",
+      "C": "Drums",
+      "D": "Saxophone"
+    },
+    "ground_truth": "A",
+    "prediction": "A",
+    "correct": true,
+    "category": "Instance Identity",
+    "level": "L1"
+  },
+  {
+    "id": "1_1582",
+    "image_path": "data/seedbench_dataset/images/3234037_846292798.jpg",
+    "question": "Which of the following words best describes the setting of the image?",
+    "options": {
+      "A": "Empty",
+      "B": "Peaceful",
+      "C": "Busy",
+      "D": "Noisy"
+    },
+    "ground_truth": "C",
+    "prediction": "C",
+    "correct": true,
+    "category": "Scene Understanding",
+    "level": "L1"
+  },
+  {
+    "id": "5_2394",
+    "image_path": "data/seedbench_dataset/images/2565031_3677944570.jpg",
+    "question": "How many people are in the image?",
+    "options": {
+      "A": "One",
+      "B": "Three",
+      "C": "Two",
+      "D": "More than three"
+    },
+    "ground_truth": "B",
+    "prediction": "B",
+    "correct": true,
+    "category": "Instances Counting",
+    "level": "L1"
+  },
+  {
+    "id": "5_1236",
+    "image_path": "data/seedbench_dataset/images/1238052_1146217205.jpg",
+    "question": "How many tree stumps are visible in the provided image?",
+    "options": {
+      "A": "One",
+      "B": "Three",
+      "C": "Two",
+      "D": "Four"
+    },
+    "ground_truth": "A",
+    "prediction": "A",
+    "correct": true,
+    "category": "Instances Counting",
+    "level": "L1"
+  },
+  {
+    "id": "4_839",
+    "image_path": "data/seedbench_dataset/images/105841_1067147049.jpg",
+    "question": "What is the position of the woman on the left?",
+    "options": {
+      "A": "Top left",
+      "B": "Center",
+      "C": "Bottom right",
+      "D": "Top right"
+    },
+    "ground_truth": "B",
+    "prediction": "B",
+    "correct": true,
+    "category": "Instance Location",
+    "level": "L1"
+  },
+  {
+    "id": "4_588",
+    "image_path": "data/seedbench_dataset/images/2580850_3948245134.jpg",
+    "question": "Where is the clock located in the image?",
+    "options": {
+      "A": "On the fireplace mantle",
+      "B": "On the table",
+      "C": "On the bookshelf",
+      "D": "On the window sill"
+    },
+    "ground_truth": "A",
+    "prediction": "A",
+    "correct": true,
+    "category": "Instance Location",
+    "level": "L1"
+  },
+  {
+    "id": "3_2278",
+    "image_path": "data/seedbench_dataset/images/519355_4122258127.jpg",
+    "question": "What is the color of the sleeve of the man in the black shirt in the image?",
+    "options": {
+      "A": "Gray",
+      "B": "Black",
+      "C": "White",
+      "D": "Blue"
+    },
+    "ground_truth": "B",
+    "prediction": "B",
+    "correct": true,
+    "category": "Instance Attributes",
+    "level": "L1"
+  },
+  {
+    "id": "1_3126",
+    "image_path": "data/seedbench_dataset/images/1938437_2975083695.jpg",
+    "question": "What is the main focus of the image?",
+    "options": {
+      "A": "A woman and two girls standing on a red carpet with an umbrella.",
+      "B": "A person and their family at a premiere standing under an umbrella in the rain.",
+      "C": "Two girls holding an umbrella on a red carpet.",
+      "D": "People standing on a red carpet and an actress holding her daughter under an umbrella."
+    },
+    "ground_truth": "A",
+    "prediction": "A",
+    "correct": true,
+    "category": "Scene Understanding",
+    "level": "L1"
+  },
+  {
+    "id": "3_1025",
+    "image_path": "data/seedbench_dataset/images/1887858_1770623542.jpg",
+    "question": "What is the shape of the table in the image?",
+    "options": {
+      "A": "Square",
+      "B": "Circle",
+      "C": "Rectangle",
+      "D": "Triangle"
+    },
+    "ground_truth": "C",
+    "prediction": "C",
+    "correct": true,
+    "category": "Instance Attributes",
+    "level": "L1"
+  },
+  {
+    "id": "4_536",
+    "image_path": "data/seedbench_dataset/images/385985_2787485096.jpg",
+    "question": "What is the position of the fishing rod in the image?",
+    "options": {
+      "A": "It is lying at the bottom of the boat",
+      "B": "It is held by the man and facing left",
+      "C": "It is held by the man and facing right",
+      "D": "It is not visible in the image"
+    },
+    "ground_truth": "B",
+    "prediction": "C",
+    "correct": false,
+    "category": "Instance Location",
+    "level": "L1"
+  },
+  {
+    "id": "1_1642",
+    "image_path": "data/seedbench_dataset/images/421794_1152468392.jpg",
+    "question": "What is the focus of the image?",
+    "options": {
+      "A": "People",
+      "B": "Microphones",
+      "C": "Guitars",
+      "D": "Lighting"
+    },
+    "ground_truth": "A",
+    "prediction": "A",
+    "correct": true,
+    "category": "Scene Understanding",
+    "level": "L1"
+  },
+  {
+    "id": "3_4597",
+    "image_path": "data/seedbench_dataset/images/1362471_79983237.jpg",
+    "question": "What is the color of the bride's dress?",
+    "options": {
+      "A": "It can't be determined from the information provided",
+      "B": "Black",
+      "C": "Grey",
+      "D": "White"
+    },
+    "ground_truth": "D",
+    "prediction": "D",
+    "correct": true,
+    "category": "Instance Attributes",
+    "level": "L1"
+  },
+  {
+    "id": "6_374",
+    "image_path": "data/seedbench_dataset/images/1659051_151900320.jpg",
+    "question": "What is the relation between the umbrella and the couple in front of the castle?",
+    "options": {
+      "A": "The man is holding the umbrella over the couple",
+      "B": "The umbrella is on the ground next to the couple",
+      "C": "The couple is holding the umbrella",
+      "D": "The umbrella is not related to the couple"
+    },
+    "ground_truth": "C",
+    "prediction": "A",
+    "correct": false,
+    "category": "Spatial Relation",
+    "level": "L1"
+  },
+  {
+    "id": "2_1000",
+    "image_path": "data/seedbench_dataset/images/893029_2765254149.jpg",
+    "question": "Which of the following objects is located in the top right area of the image?",
+    "options": {
+      "A": "a basketball court",
+      "B": "a person",
+      "C": "a banner",
+      "D": "a cellphone"
+    },
+    "ground_truth": "C",
+    "prediction": "C",
+    "correct": true,
+    "category": "Instance Identity",
+    "level": "L1"
+  },
+  {
+    "id": "2_399",
+    "image_path": "data/seedbench_dataset/images/693907_3894435736.jpg",
+    "question": "What is the main musical instrument being played on stage?",
+    "options": {
+      "A": "Guitar",
+      "B": "Drums",
+      "C": "Piano",
+      "D": "Trumpet"
+    },
+    "ground_truth": "A",
+    "prediction": "A",
+    "correct": true,
+    "category": "Instance Identity",
+    "level": "L1"
+  },
+  {
+    "id": "1_1656",
+    "image_path": "data/seedbench_dataset/images/420331_1303877339.jpg",
+    "question": "What is the main color of the image?",
+    "options": {
+      "A": "Red",
+      "B": "Green",
+      "C": "Black",
+      "D": "White"
+    },
+    "ground_truth": "D",
+    "prediction": "D",
+    "correct": true,
+    "category": "Scene Understanding",
+    "level": "L1"
+  },
+  {
+    "id": "5_60",
+    "image_path": "data/seedbench_dataset/images/2167615_1061051137.jpg",
+    "question": "How many visible instruments are there in the scene?",
+    "options": {
+      "A": "One",
+      "B": "Three",
+      "C": "Two",
+      "D": "Four"
+    },
+    "ground_truth": "C",
+    "prediction": "C",
+    "correct": true,
+    "category": "Instances Counting",
+    "level": "L1"
+  },
+  {
+    "id": "5_704",
+    "image_path": "data/seedbench_dataset/images/242765_1084029943.jpg",
+    "question": "How many children appear in the image?",
+    "options": {
+      "A": "Three",
+      "B": "Two",
+      "C": "One",
+      "D": "Four"
+    },
+    "ground_truth": "B",
+    "prediction": "B",
+    "correct": true,
+    "category": "Instances Counting",
+    "level": "L1"
+  },
+  {
+    "id": "5_969",
+    "image_path": "data/seedbench_dataset/images/1437645_1613954862.jpg",
+    "question": "How many people are on stage performing in the image?",
+    "options": {
+      "A": "one",
+      "B": "three",
+      "C": "two",
+      "D": "four"
+    },
+    "ground_truth": "D",
+    "prediction": "D",
+    "correct": true,
+    "category": "Instances Counting",
+    "level": "L1"
+  },
+  {
+    "id": "5_1625",
+    "image_path": "data/seedbench_dataset/images/500034_4177959752.jpg",
+    "question": "How many people are visible in the image?",
+    "options": {
+      "A": "1",
+      "B": "2",
+      "C": "3",
+      "D": "4"
+    },
+    "ground_truth": "A",
+    "prediction": "A",
+    "correct": true,
+    "category": "Instances Counting",
+    "level": "L1"
+  },
+  {
+    "id": "5_2119",
+    "image_path": "data/seedbench_dataset/images/2747629_3880573681.jpg",
+    "question": "How many different types of animals are in the herd being led by the man?",
+    "options": {
+      "A": "One",
+      "B": "Two",
+      "C": "Four",
+      "D": "Three"
+    },
+    "ground_truth": "A",
+    "prediction": "A",
+    "correct": true,
+    "category": "Instances Counting",
+    "level": "L1"
+  },
+  {
+    "id": "5_2326",
+    "image_path": "data/seedbench_dataset/images/304083_1984391670.jpg",
+    "question": "How many fingers are visible in the image?",
+    "options": {
+      "A": "2",
+      "B": "3",
+      "C": "4",
+      "D": "5"
+    },
+    "ground_truth": "C",
+    "prediction": "C",
+    "correct": true,
+    "category": "Instances Counting",
+    "level": "L1"
+  },
+  {
+    "id": "1_2591",
+    "image_path": "data/seedbench_dataset/images/1728754_969805148.jpg",
+    "question": "On which detection is based the description of \"three women sitting at a table with a bottle of wine\"?",
+    "options": {
+      "A": "Captions",
+      "B": "Attribute Detection",
+      "C": "Object Detection",
+      "D": "Dense Captions"
+    },
+    "ground_truth": "C",
+    "prediction": "A",
+    "correct": false,
+    "category": "Scene Understanding",
+    "level": "L1"
+  },
+  {
+    "id": "3_1961",
+    "image_path": "data/seedbench_dataset/images/295682_3129489246.jpg",
+    "question": "What is the color of the wall in the image?",
+    "options": {
+      "A": "Brown",
+      "B": "Blue",
+      "C": "Red",
+      "D": "Orange"
+    },
+    "ground_truth": "C",
+    "prediction": "C",
+    "correct": true,
+    "category": "Instance Attributes",
+    "level": "L1"
+  },
+  {
+    "id": "3_23",
+    "image_path": "data/seedbench_dataset/images/675_1302587992.jpg",
+    "question": "What type of equipment is the person standing closest to the base wearing on their head?",
+    "options": {
+      "A": "A cowboy hat",
+      "B": "A beanie",
+      "C": "A bike helmet",
+      "D": "A baseball cap"
+    },
+    "ground_truth": "D",
+    "prediction": "D",
+    "correct": true,
+    "category": "Instance Attributes",
+    "level": "L1"
+  },
+  {
+    "id": "6_369",
+    "image_path": "data/seedbench_dataset/images/2014831_22993464.jpg",
+    "question": "What is the relative spatial position of the pond and the trees in the image?",
+    "options": {
+      "A": "They are adjacent to each other",
+      "B": "They are on opposite sides of the image",
+      "C": "The trees are in front of the pond",
+      "D": "The pond is in front of the trees"
+    },
+    "ground_truth": "A",
+    "prediction": "D",
+    "correct": false,
+    "category": "Spatial Relation",
+    "level": "L1"
+  },
+  {
+    "id": "1_994",
+    "image_path": "data/seedbench_dataset/images/101794_730891233.jpg",
+    "question": "Which object appears to be the farthest from the camera in the image?",
+    "options": {
+      "A": "carriage",
+      "B": "person",
+      "C": "building",
+      "D": "hat"
+    },
+    "ground_truth": "B",
+    "prediction": "C",
+    "correct": false,
+    "category": "Scene Understanding",
+    "level": "L1"
+  }
+]

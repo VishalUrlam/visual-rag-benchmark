@@ -17,8 +17,13 @@ _IMG_W = 120
 _IMG_H = 90
 _ROW_H = 70
 
-_ANTHROPIC_MODEL = "Claude Opus 4.7"
-_OPENAI_MODEL    = "GPT-5.5"
+_MODEL_COLORS = {
+    "anthropic":    "2E4057",
+    "openai":       "1B4332",
+    "gemini_pro":   "4A235A",
+    "gemini_flash": "0E4D4D",
+    "kimi":         "7B3F00",
+}
 
 
 def _thumb(image_path: str, width: int, height: int) -> io.BytesIO:
@@ -31,126 +36,121 @@ def _thumb(image_path: str, width: int, height: int) -> io.BytesIO:
 
 
 def export_gqa_excel(
-    anthropic_result: GQAResult | None,
-    openai_result: GQAResult | None,
     output_path: Path,
-    anthropic_model: str = _ANTHROPIC_MODEL,
-    openai_model: str = _OPENAI_MODEL,
+    *,
+    anthropic_result: GQAResult | None = None,
+    openai_result: GQAResult | None = None,
+    gemini_pro_result: GQAResult | None = None,
+    gemini_flash_result: GQAResult | None = None,
+    kimi_result: GQAResult | None = None,
+    anthropic_model: str = "Claude Opus 4.7",
+    openai_model: str = "GPT-5.5",
+    gemini_pro_model: str = "Gemini 3.1 Pro",
+    gemini_flash_model: str = "Gemini 3.5 Flash",
+    kimi_model: str = "Kimi K2.6",
 ) -> None:
     wb = Workbook()
     ws = wb.active
     ws.title = "GQA Results"
 
-    dark_fill   = PatternFill("solid", fgColor="1F3864")
-    anth_fill   = PatternFill("solid", fgColor="2E4057")
-    oai_fill    = PatternFill("solid", fgColor="1B4332")
-    white_bold  = Font(bold=True, color="FFFFFF", size=12)
-    header_font = Font(bold=True, color="FFFFFF", size=11)
+    dark_fill  = PatternFill("solid", fgColor="1F3864")
+    white_bold = Font(bold=True, color="FFFFFF", size=12)
+    hdr_font   = Font(bold=True, color="FFFFFF", size=11)
 
-    # ── Row 1: model name banner ──────────────────────────────────────────── #
+    # model columns: (label, result, color, start_col)
+    models = []
+    col = 6
+    for label, result, color_key in [
+        (anthropic_model,    anthropic_result,    "anthropic"),
+        (openai_model,       openai_result,       "openai"),
+        (gemini_pro_model,   gemini_pro_result,   "gemini_pro"),
+        (gemini_flash_model, gemini_flash_result, "gemini_flash"),
+        (kimi_model,         kimi_result,         "kimi"),
+    ]:
+        if result is not None:
+            models.append((label, result, _MODEL_COLORS[color_key], col))
+            col += 2
+
+    total_cols = 5 + len(models) * 2
+
+    # ── Row 1: model banners ──────────────────────────────────────────────── #
     ws.row_dimensions[1].height = 28
+    for c in range(1, 6):
+        ws.cell(row=1, column=c).fill = dark_fill
 
-    for col in range(1, 6):
-        c = ws.cell(row=1, column=col)
-        c.fill = dark_fill
-
-    if anthropic_result:
-        ws.merge_cells("F1:G1")
-        c = ws.cell(row=1, column=6, value=anthropic_model)
-        c.fill = anth_fill
-        c.font = white_bold
-        c.alignment = Alignment(horizontal="center", vertical="center")
-
-    if openai_result:
-        ws.merge_cells("H1:I1")
-        c = ws.cell(row=1, column=8, value=openai_model)
-        c.fill = oai_fill
+    for label, _, color, start_col in models:
+        ws.merge_cells(start_row=1, start_column=start_col, end_row=1, end_column=start_col + 1)
+        c = ws.cell(row=1, column=start_col, value=label)
+        c.fill = PatternFill("solid", fgColor=color)
         c.font = white_bold
         c.alignment = Alignment(horizontal="center", vertical="center")
 
     # ── Row 2: column headers ─────────────────────────────────────────────── #
     ws.row_dimensions[2].height = 30
-    headers = [
-        "Image", "Image ID", "Question", "Category", "Ground Truth",
-        "Prediction", "✓ / ✗",
-        "Prediction", "✓ / ✗",
-    ]
-    for col, h in enumerate(headers, 1):
-        cell = ws.cell(row=2, column=col, value=h)
+    base_headers = ["Image", "Image ID", "Question", "Category", "Ground Truth"]
+    all_headers = base_headers + ["Prediction", "✓ / ✗"] * len(models)
+    for c, h in enumerate(all_headers, 1):
+        cell = ws.cell(row=2, column=c, value=h)
         cell.fill = dark_fill
-        cell.font = header_font
+        cell.font = hdr_font
         cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
 
     # ── column widths ─────────────────────────────────────────────────────── #
-    col_widths = [18, 12, 40, 10, 16, 22, 8, 22, 8]
-    for col, w in enumerate(col_widths, 1):
-        ws.column_dimensions[get_column_letter(col)].width = w
+    base_widths = [18, 12, 40, 10, 14]
+    model_widths = [22, 8] * len(models)
+    for c, w in enumerate(base_widths + model_widths, 1):
+        ws.column_dimensions[get_column_letter(c)].width = w
 
     # ── data rows ─────────────────────────────────────────────────────────── #
-    anth_map = {item.id: item for item in (anthropic_result.items if anthropic_result else [])}
-    oai_map  = {item.id: item for item in (openai_result.items  if openai_result  else [])}
-    all_ids  = list(dict.fromkeys(list(anth_map) + list(oai_map)))
+    all_maps = [({item.id: item for item in r.items}, start_col) for _, r, _, start_col in models]
+    all_ids = list(dict.fromkeys(
+        iid for m, _ in all_maps for iid in m
+    ))
 
     green = PatternFill("solid", fgColor="C6EFCE")
     red   = PatternFill("solid", fgColor="FFC7CE")
 
     for row_idx, qid in enumerate(all_ids, 3):
-        anth = anth_map.get(qid)
-        oai  = oai_map.get(qid)
-        ref  = anth or oai
-
         ws.row_dimensions[row_idx].height = _ROW_H
 
-        img_path = ref.image_path if ref else None
-        if img_path and Path(img_path).exists():
+        ref = next((m[qid] for m, _ in all_maps if qid in m), None)
+
+        if ref and Path(ref.image_path).exists():
             try:
-                buf = _thumb(img_path, _IMG_W, _IMG_H)
-                xl_img = XLImage(buf)
-                xl_img.width  = _IMG_W
-                xl_img.height = _IMG_H
-                ws.add_image(xl_img, f"A{row_idx}")
+                buf = _thumb(ref.image_path, _IMG_W, _IMG_H)
+                xl = XLImage(buf)
+                xl.width, xl.height = _IMG_W, _IMG_H
+                ws.add_image(xl, f"A{row_idx}")
             except Exception:
-                ws.cell(row=row_idx, column=1, value="[image error]")
+                ws.cell(row=row_idx, column=1, value="[error]")
         else:
             ws.cell(row=row_idx, column=1, value="[missing]")
 
-        for col, val in enumerate([
-            None,
+        for c, val in enumerate([None,
             ref.image_id if ref else "",
             ref.question if ref else "",
             ref.category if ref else "",
             ref.ground_truth if ref else "",
         ], 1):
             if val is not None:
-                ws.cell(row=row_idx, column=col, value=val).alignment = Alignment(
-                    vertical="center", wrap_text=True
-                )
+                ws.cell(row=row_idx, column=c, value=val).alignment = Alignment(vertical="center", wrap_text=True)
 
-        def _write_pred(col: int, item) -> None:
+        for item_map, start_col in all_maps:
+            item = item_map.get(qid)
             if item is None:
-                ws.cell(row=row_idx, column=col, value="N/A").alignment = Alignment(vertical="center")
-                ws.cell(row=row_idx, column=col + 1, value="").alignment = Alignment(vertical="center", horizontal="center")
-                return
-            ws.cell(row=row_idx, column=col, value=item.prediction).alignment = Alignment(
-                vertical="center", wrap_text=True
-            )
-            tick = ws.cell(row=row_idx, column=col + 1, value="✓" if item.correct else "✗")
-            tick.alignment = Alignment(horizontal="center", vertical="center")
-            tick.fill = green if item.correct else red
-            tick.font = Font(bold=True, color="375623" if item.correct else "9C0006")
-
-        _write_pred(6, anth)
-        _write_pred(8, oai)
+                ws.cell(row=row_idx, column=start_col, value="N/A").alignment = Alignment(vertical="center")
+                continue
+            ws.cell(row=row_idx, column=start_col, value=item.prediction).alignment = Alignment(vertical="center", wrap_text=True)
+            tc = ws.cell(row=row_idx, column=start_col + 1, value="✓" if item.correct else "✗")
+            tc.alignment = Alignment(horizontal="center", vertical="center")
+            tc.fill = green if item.correct else red
+            tc.font = Font(bold=True, color="375623" if item.correct else "9C0006")
 
     # ── summary ───────────────────────────────────────────────────────────── #
-    summary_row = len(all_ids) + 4
-    ws.cell(row=summary_row, column=1, value="Summary").font = Font(bold=True, size=12)
-
-    if anthropic_result:
-        ws.cell(row=summary_row + 1, column=1, value=anthropic_model)
-        ws.cell(row=summary_row + 1, column=2, value=f"{anthropic_result.accuracy:.1%}")
-    if openai_result:
-        ws.cell(row=summary_row + 2, column=1, value=openai_model)
-        ws.cell(row=summary_row + 2, column=2, value=f"{openai_result.accuracy:.1%}")
+    sr = len(all_ids) + 4
+    ws.cell(row=sr, column=1, value="Summary").font = Font(bold=True, size=12)
+    for offset, (label, result, _, _) in enumerate(models, 1):
+        ws.cell(row=sr + offset, column=1, value=label)
+        ws.cell(row=sr + offset, column=2, value=f"{result.accuracy:.1%}")
 
     wb.save(output_path)

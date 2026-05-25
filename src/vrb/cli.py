@@ -434,17 +434,21 @@ def seedbench(
     ] = _SEEDBENCH_DATA / "dataset.json",
     models: Annotated[
         str,
-        typer.Option("--models", "-m", help="Comma-separated models to run: anthropic,openai"),
-    ] = "anthropic,openai",
+        typer.Option("--models", "-m", help="Comma-separated: anthropic,openai,gemini-pro,gemini-flash,kimi"),
+    ] = "anthropic,openai,gemini-pro,gemini-flash,kimi",
     output: Annotated[
         Path | None,
         typer.Option("--output", "-o", help="Output Excel file path"),
     ] = None,
 ) -> None:
-    """Run SEED-Bench MCQ benchmark against vision models and export results to Excel."""
+    """Run SEED-Bench MCQ benchmark against vision models and export results to Excel.
+    Skips any model whose cached results already exist in results/cache/.
+    """
     from .seedbench_loader import load_seedbench
     from .seedbench_anthropic_runner import run_seedbench_anthropic
     from .seedbench_openai_runner import run_seedbench_openai
+    from .seedbench_openrouter_runner import run_seedbench_openrouter
+    from .seedbench_evaluator import SEEDBenchResult, SEEDBenchItemResult
     from .seedbench_excel_export import export_seedbench_excel
 
     if not dataset.exists():
@@ -454,33 +458,76 @@ def seedbench(
     samples = load_seedbench(dataset)
     console.print(f"[bold]Loaded [cyan]{len(samples)}[/cyan] SEED-Bench samples[/bold]")
 
+    cache_dir = Path("results/cache")
+    cache_dir.mkdir(parents=True, exist_ok=True)
+
+    def _load_cache(key: str) -> SEEDBenchResult | None:
+        p = cache_dir / f"seedbench_{key}.json"
+        if not p.exists():
+            return None
+        items = [SEEDBenchItemResult(**i) for i in json.loads(p.read_text())]
+        r = SEEDBenchResult(); r.items = items
+        return r
+
+    def _save_cache(key: str, result: SEEDBenchResult) -> None:
+        import dataclasses
+        p = cache_dir / f"seedbench_{key}.json"
+        p.write_text(json.dumps([dataclasses.asdict(i) for i in result.items], indent=2))
+
+    def _run_or_load(key: str, label: str, runner_fn) -> SEEDBenchResult:
+        cached = _load_cache(key)
+        if cached is not None:
+            console.print(f"\n[dim]Loaded cached results for [cyan]{label}[/cyan] ({cached.accuracy:.1%})[/dim]")
+            return cached
+        console.print(f"\n[bold]Running via [cyan]{label}[/cyan]...[/bold]")
+        result = runner_fn()
+        _save_cache(key, result)
+        console.print(f"[bold]Accuracy: [cyan]{result.accuracy:.1%}[/cyan][/bold]")
+        return result
+
     model_list = [m.strip() for m in models.split(",")]
-    anthropic_result = None
-    openai_result = None
+    anthropic_result = openai_result = gemini_pro_result = gemini_flash_result = kimi_result = None
 
     if "anthropic" in model_list:
         if not settings.anthropic_api_key:
-            console.print("[red]ANTHROPIC_API_KEY is not set in .env[/red]")
-            raise typer.Exit(1)
-        console.print("\n[bold]Running via [cyan]Anthropic Claude Opus 4.7[/cyan]...[/bold]")
-        anthropic_result = run_seedbench_anthropic(samples, log=console.print)
-        console.print(f"[bold]Anthropic accuracy: [cyan]{anthropic_result.accuracy:.1%}[/cyan][/bold]")
+            console.print("[red]ANTHROPIC_API_KEY is not set in .env[/red]"); raise typer.Exit(1)
+        anthropic_result = _run_or_load("anthropic", "Claude Opus 4.7",
+            lambda: run_seedbench_anthropic(samples, log=console.print))
 
     if "openai" in model_list:
         if not settings.openai_api_key:
-            console.print("[red]OPENAI_API_KEY is not set in .env[/red]")
-            raise typer.Exit(1)
-        console.print("\n[bold]Running via [cyan]OpenAI GPT-5.5[/cyan]...[/bold]")
-        openai_result = run_seedbench_openai(samples, log=console.print)
-        console.print(f"[bold]OpenAI accuracy: [cyan]{openai_result.accuracy:.1%}[/cyan][/bold]")
+            console.print("[red]OPENAI_API_KEY is not set in .env[/red]"); raise typer.Exit(1)
+        openai_result = _run_or_load("openai", "GPT-5.5",
+            lambda: run_seedbench_openai(samples, log=console.print))
+
+    if "gemini-pro" in model_list:
+        if not settings.openrouter_api_key:
+            console.print("[red]OPENROUTER_API_KEY is not set in .env[/red]"); raise typer.Exit(1)
+        gemini_pro_result = _run_or_load("gemini_pro", "Gemini 3.1 Pro",
+            lambda: run_seedbench_openrouter(samples, model="~google/gemini-pro-latest", log=console.print))
+
+    if "gemini-flash" in model_list:
+        if not settings.openrouter_api_key:
+            console.print("[red]OPENROUTER_API_KEY is not set in .env[/red]"); raise typer.Exit(1)
+        gemini_flash_result = _run_or_load("gemini_flash", "Gemini 3.5 Flash",
+            lambda: run_seedbench_openrouter(samples, model="~google/gemini-flash-latest", log=console.print))
+
+    if "kimi" in model_list:
+        if not settings.openrouter_api_key:
+            console.print("[red]OPENROUTER_API_KEY is not set in .env[/red]"); raise typer.Exit(1)
+        kimi_result = _run_or_load("kimi", "Kimi K2.6",
+            lambda: run_seedbench_openrouter(samples, model="moonshotai/kimi-k2.6", log=console.print))
 
     if output is None:
-        ts = datetime.utcnow().strftime("%Y%m%dT%H%M%S")
-        output = Path("results") / f"seedbench_{ts}.xlsx"
+        output = Path("results") / "seedbench_all_models.xlsx"
     output.parent.mkdir(parents=True, exist_ok=True)
 
     console.print(f"\n[bold]Exporting Excel report to [cyan]{output}[/cyan]...[/bold]")
-    export_seedbench_excel(anthropic_result, openai_result, output)
+    export_seedbench_excel(output,
+        anthropic_result=anthropic_result, openai_result=openai_result,
+        gemini_pro_result=gemini_pro_result, gemini_flash_result=gemini_flash_result,
+        kimi_result=kimi_result,
+    )
     console.print(f"[green]Done![/green] Saved to {output}")
 
 
@@ -492,17 +539,21 @@ def gqa(
     ] = _GQA_DATA / "dataset.json",
     models: Annotated[
         str,
-        typer.Option("--models", "-m", help="Comma-separated models to run: anthropic,openai"),
-    ] = "anthropic,openai",
+        typer.Option("--models", "-m", help="Comma-separated: anthropic,openai,gemini-pro,gemini-flash,kimi"),
+    ] = "anthropic,openai,gemini-pro,gemini-flash,kimi",
     output: Annotated[
         Path | None,
         typer.Option("--output", "-o", help="Output Excel file path"),
     ] = None,
 ) -> None:
-    """Run GQA benchmark against vision models and export results to Excel with images."""
+    """Run GQA benchmark against vision models and export results to Excel with images.
+    Skips any model whose cached results already exist in results/cache/.
+    """
     from .gqa_loader import load_gqa
     from .gqa_anthropic_runner import run_gqa_anthropic
     from .gqa_openai_runner import run_gqa_openai
+    from .gqa_openrouter_runner import run_gqa_openrouter
+    from .gqa_evaluator import GQAResult, GQAItemResult
     from .gqa_excel_export import export_gqa_excel
 
     if not dataset.exists():
@@ -512,33 +563,76 @@ def gqa(
     samples = load_gqa(dataset)
     console.print(f"[bold]Loaded [cyan]{len(samples)}[/cyan] GQA samples[/bold]")
 
+    cache_dir = Path("results/cache")
+    cache_dir.mkdir(parents=True, exist_ok=True)
+
+    def _load_cache(key: str) -> GQAResult | None:
+        p = cache_dir / f"gqa_{key}.json"
+        if not p.exists():
+            return None
+        items = [GQAItemResult(**i) for i in json.loads(p.read_text())]
+        r = GQAResult(); r.items = items
+        return r
+
+    def _save_cache(key: str, result: GQAResult) -> None:
+        import dataclasses
+        p = cache_dir / f"gqa_{key}.json"
+        p.write_text(json.dumps([dataclasses.asdict(i) for i in result.items], indent=2))
+
+    def _run_or_load(key: str, label: str, runner_fn) -> GQAResult:
+        cached = _load_cache(key)
+        if cached is not None:
+            console.print(f"\n[dim]Loaded cached results for [cyan]{label}[/cyan] ({cached.accuracy:.1%})[/dim]")
+            return cached
+        console.print(f"\n[bold]Running via [cyan]{label}[/cyan]...[/bold]")
+        result = runner_fn()
+        _save_cache(key, result)
+        console.print(f"[bold]Accuracy: [cyan]{result.accuracy:.1%}[/cyan][/bold]")
+        return result
+
     model_list = [m.strip() for m in models.split(",")]
-    anthropic_result = None
-    openai_result = None
+    anthropic_result = openai_result = gemini_pro_result = gemini_flash_result = kimi_result = None
 
     if "anthropic" in model_list:
         if not settings.anthropic_api_key:
-            console.print("[red]ANTHROPIC_API_KEY is not set in .env[/red]")
-            raise typer.Exit(1)
-        console.print("\n[bold]Running via [cyan]Anthropic Claude (claude-opus-4-7)[/cyan]...[/bold]")
-        anthropic_result = run_gqa_anthropic(samples, log=console.print)
-        console.print(f"[bold]Anthropic accuracy: [cyan]{anthropic_result.accuracy:.1%}[/cyan][/bold]")
+            console.print("[red]ANTHROPIC_API_KEY is not set in .env[/red]"); raise typer.Exit(1)
+        anthropic_result = _run_or_load("anthropic", "Claude Opus 4.7",
+            lambda: run_gqa_anthropic(samples, log=console.print))
 
     if "openai" in model_list:
         if not settings.openai_api_key:
-            console.print("[red]OPENAI_API_KEY is not set in .env[/red]")
-            raise typer.Exit(1)
-        console.print("\n[bold]Running via [cyan]OpenAI GPT-5.5[/cyan]...[/bold]")
-        openai_result = run_gqa_openai(samples, log=console.print)
-        console.print(f"[bold]OpenAI accuracy: [cyan]{openai_result.accuracy:.1%}[/cyan][/bold]")
+            console.print("[red]OPENAI_API_KEY is not set in .env[/red]"); raise typer.Exit(1)
+        openai_result = _run_or_load("openai", "GPT-5.5",
+            lambda: run_gqa_openai(samples, log=console.print))
+
+    if "gemini-pro" in model_list:
+        if not settings.openrouter_api_key:
+            console.print("[red]OPENROUTER_API_KEY is not set in .env[/red]"); raise typer.Exit(1)
+        gemini_pro_result = _run_or_load("gemini_pro", "Gemini 3.1 Pro",
+            lambda: run_gqa_openrouter(samples, model="~google/gemini-pro-latest", log=console.print))
+
+    if "gemini-flash" in model_list:
+        if not settings.openrouter_api_key:
+            console.print("[red]OPENROUTER_API_KEY is not set in .env[/red]"); raise typer.Exit(1)
+        gemini_flash_result = _run_or_load("gemini_flash", "Gemini 3.5 Flash",
+            lambda: run_gqa_openrouter(samples, model="~google/gemini-flash-latest", log=console.print))
+
+    if "kimi" in model_list:
+        if not settings.openrouter_api_key:
+            console.print("[red]OPENROUTER_API_KEY is not set in .env[/red]"); raise typer.Exit(1)
+        kimi_result = _run_or_load("kimi", "Kimi K2.6",
+            lambda: run_gqa_openrouter(samples, model="moonshotai/kimi-k2.6", log=console.print))
 
     if output is None:
-        ts = datetime.utcnow().strftime("%Y%m%dT%H%M%S")
-        output = Path("results") / f"gqa_{ts}.xlsx"
+        output = Path("results") / "gqa_all_models.xlsx"
     output.parent.mkdir(parents=True, exist_ok=True)
 
     console.print(f"\n[bold]Exporting Excel report to [cyan]{output}[/cyan]...[/bold]")
-    export_gqa_excel(anthropic_result, openai_result, output)
+    export_gqa_excel(output,
+        anthropic_result=anthropic_result, openai_result=openai_result,
+        gemini_pro_result=gemini_pro_result, gemini_flash_result=gemini_flash_result,
+        kimi_result=kimi_result,
+    )
     console.print(f"[green]Done![/green] Saved to {output}")
 
 
