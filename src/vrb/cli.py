@@ -230,41 +230,31 @@ typer.Option(help="Run directly through a vision model: anthropic | openai"),
     # Vision model mode                                                    #
     # ------------------------------------------------------------------ #
     if model is not None:
+        from .freak_openrouter_runner import run_freak_openrouter
+        if not settings.openrouter_api_key:
+            console.print("[red]OPENROUTER_API_KEY is not set in .env[/red]")
+            raise typer.Exit(1)
         if model == "anthropic":
-            from .freak_anthropic_runner import run_freak_anthropic
-            if not settings.anthropic_api_key:
-                console.print("[red]ANTHROPIC_API_KEY is not set in .env[/red]")
-                raise typer.Exit(1)
-            console.print(
-                f"[bold]Running FREAK via [cyan]Claude (claude-opus-4-7)[/cyan] "
-                f"({len(mcq_samples)} MCQ + {len(qa_samples)} QA samples)[/bold]"
-            )
-            mcq_result, qa_result = run_freak_anthropic(
-                mcq_samples if run_mcq else [],
-                qa_samples if run_qa else [],
-                log=console.print,
-            )
+            or_model = "anthropic/claude-opus-4.7"
+            label = "Claude Opus 4.7"
             model_tag = "anthropic"
         elif model == "openai":
-            from .freak_openai_runner import run_freak_openai
-            if not settings.openai_api_key:
-                console.print("[red]OPENAI_API_KEY is not set in .env[/red]")
-                raise typer.Exit(1)
-            console.print(
-                f"[bold]Running FREAK via [cyan]OpenAI GPT-5.5[/cyan] "
-                f"({len(mcq_samples)} MCQ + {len(qa_samples)} QA samples)[/bold]"
-            )
-            mcq_result, qa_result = asyncio.run(
-                run_freak_openai(
-                    mcq_samples if run_mcq else [],
-                    qa_samples if run_qa else [],
-                    log=console.print,
-                )
-            )
+            or_model = "openai/gpt-5.5"
+            label = "GPT-5.5"
             model_tag = "openai"
         else:
             console.print(f"[red]Unknown model: {model}. Supported: anthropic | openai[/red]")
             raise typer.Exit(1)
+        console.print(
+            f"[bold]Running FREAK via [cyan]{label}[/cyan] "
+            f"({len(mcq_samples)} MCQ + {len(qa_samples)} QA samples)[/bold]"
+        )
+        mcq_result, qa_result = run_freak_openrouter(
+            mcq_samples if run_mcq else [],
+            qa_samples if run_qa else [],
+            model=or_model,
+            log=console.print,
+        )
 
         if mcq_result:
             _print_mcq_result(mcq_result)
@@ -445,8 +435,6 @@ def seedbench(
     Skips any model whose cached results already exist in results/cache/.
     """
     from .seedbench_loader import load_seedbench
-    from .seedbench_anthropic_runner import run_seedbench_anthropic
-    from .seedbench_openai_runner import run_seedbench_openai
     from .seedbench_openrouter_runner import run_seedbench_openrouter
     from .seedbench_evaluator import SEEDBenchResult, SEEDBenchItemResult
     from .seedbench_excel_export import export_seedbench_excel
@@ -489,16 +477,16 @@ def seedbench(
     anthropic_result = openai_result = gemini_pro_result = gemini_flash_result = kimi_result = None
 
     if "anthropic" in model_list:
-        if not settings.anthropic_api_key:
-            console.print("[red]ANTHROPIC_API_KEY is not set in .env[/red]"); raise typer.Exit(1)
+        if not settings.openrouter_api_key:
+            console.print("[red]OPENROUTER_API_KEY is not set in .env[/red]"); raise typer.Exit(1)
         anthropic_result = _run_or_load("anthropic", "Claude Opus 4.7",
-            lambda: run_seedbench_anthropic(samples, log=console.print))
+            lambda: run_seedbench_openrouter(samples, model="anthropic/claude-opus-4.7", log=console.print))
 
     if "openai" in model_list:
-        if not settings.openai_api_key:
-            console.print("[red]OPENAI_API_KEY is not set in .env[/red]"); raise typer.Exit(1)
+        if not settings.openrouter_api_key:
+            console.print("[red]OPENROUTER_API_KEY is not set in .env[/red]"); raise typer.Exit(1)
         openai_result = _run_or_load("openai", "GPT-5.5",
-            lambda: run_seedbench_openai(samples, log=console.print))
+            lambda: run_seedbench_openrouter(samples, model="openai/gpt-5.5", log=console.print))
 
     if "gemini-pro" in model_list:
         if not settings.openrouter_api_key:
@@ -550,8 +538,6 @@ def gqa(
     Skips any model whose cached results already exist in results/cache/.
     """
     from .gqa_loader import load_gqa
-    from .gqa_anthropic_runner import run_gqa_anthropic
-    from .gqa_openai_runner import run_gqa_openai
     from .gqa_openrouter_runner import run_gqa_openrouter
     from .gqa_evaluator import GQAResult, GQAItemResult
     from .gqa_excel_export import export_gqa_excel
@@ -594,16 +580,16 @@ def gqa(
     anthropic_result = openai_result = gemini_pro_result = gemini_flash_result = kimi_result = None
 
     if "anthropic" in model_list:
-        if not settings.anthropic_api_key:
-            console.print("[red]ANTHROPIC_API_KEY is not set in .env[/red]"); raise typer.Exit(1)
+        if not settings.openrouter_api_key:
+            console.print("[red]OPENROUTER_API_KEY is not set in .env[/red]"); raise typer.Exit(1)
         anthropic_result = _run_or_load("anthropic", "Claude Opus 4.7",
-            lambda: run_gqa_anthropic(samples, log=console.print))
+            lambda: run_gqa_openrouter(samples, model="anthropic/claude-opus-4.7", log=console.print))
 
     if "openai" in model_list:
-        if not settings.openai_api_key:
-            console.print("[red]OPENAI_API_KEY is not set in .env[/red]"); raise typer.Exit(1)
+        if not settings.openrouter_api_key:
+            console.print("[red]OPENROUTER_API_KEY is not set in .env[/red]"); raise typer.Exit(1)
         openai_result = _run_or_load("openai", "GPT-5.5",
-            lambda: run_gqa_openai(samples, log=console.print))
+            lambda: run_gqa_openrouter(samples, model="openai/gpt-5.5", log=console.print))
 
     if "gemini-pro" in model_list:
         if not settings.openrouter_api_key:

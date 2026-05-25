@@ -9,6 +9,7 @@ __pycache__/
 results/
 data/gqa_dataset/
 data/seed_bench_h/
+data/Master Dataset/
 dist/
 *.egg-info/
 .ruff_cache/

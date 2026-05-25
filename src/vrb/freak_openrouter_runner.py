@@ -1,16 +1,9 @@
-"""Run FREAK benchmark samples directly through OpenAI vision models.
-
-For each sample the runner:
-  1. Encodes the image as base64.
-  2. Sends image + question to the model (with MCQ options when available).
-  3. Compares the model's answer against the ground truth.
-"""
+"""Run FREAK benchmark samples through OpenRouter (any vision model)."""
 
 from __future__ import annotations
 
 import asyncio
 import base64
-from dataclasses import dataclass, field
 from pathlib import Path
 
 from openai import AsyncOpenAI
@@ -18,6 +11,8 @@ from openai import AsyncOpenAI
 from .config import settings
 from .freak_evaluator import FREAKMCQResult, FREAKQAResult, MCQItemResult, QAItemResult, _mcq_match
 from .freak_loader import FREAKMCQSample, FREAKQASample
+
+_OPENROUTER_BASE = "https://openrouter.ai/api/v1"
 
 _MCQ_SYSTEM = (
     "You are a precise visual question answering assistant. "
@@ -31,7 +26,7 @@ _QA_SYSTEM = (
 
 
 def _encode_image(path: Path) -> str:
-    return base64.b64encode(path.read_bytes()).decode()
+    return base64.standard_b64encode(path.read_bytes()).decode()
 
 
 def _build_mcq_prompt(question: str, options: list[str]) -> str:
@@ -50,6 +45,7 @@ async def _ask(
     b64 = _encode_image(image_path)
     response = await client.chat.completions.create(
         model=model,
+        max_tokens=1024,
         messages=[
             {"role": "system", "content": system},
             {
@@ -60,18 +56,17 @@ async def _ask(
                 ],
             },
         ],
-        max_completion_tokens=256,
     )
-    return response.choices[0].message.content or ""
+    return (response.choices[0].message.content or "").strip()
 
 
-async def run_mcq_openai(
+async def _run_mcq(
     samples: list[FREAKMCQSample],
     *,
-    model: str = "gpt-5.5",
-    log=print,
+    model: str,
+    log,
 ) -> FREAKMCQResult:
-    client = AsyncOpenAI(api_key=settings.openai_api_key)
+    client = AsyncOpenAI(api_key=settings.openrouter_api_key, base_url=_OPENROUTER_BASE)
     result = FREAKMCQResult()
 
     for i, sample in enumerate(samples, 1):
@@ -100,17 +95,16 @@ async def run_mcq_openai(
             correct=correct, category=sample.category,
         ))
 
-    await client.close()
     return result
 
 
-async def run_qa_openai(
+async def _run_qa(
     samples: list[FREAKQASample],
     *,
-    model: str = "gpt-5.5",
-    log=print,
+    model: str,
+    log,
 ) -> FREAKQAResult:
-    client = AsyncOpenAI(api_key=settings.openai_api_key)
+    client = AsyncOpenAI(api_key=settings.openrouter_api_key, base_url=_OPENROUTER_BASE)
     result = FREAKQAResult()
 
     for i, sample in enumerate(samples, 1):
@@ -146,17 +140,19 @@ async def run_qa_openai(
             correct=correct, hallucinated=hallucinated, category=sample.category,
         ))
 
-    await client.close()
     return result
 
 
-async def run_freak_openai(
+def run_freak_openrouter(
     mcq_samples: list[FREAKMCQSample],
     qa_samples: list[FREAKQASample],
     *,
-    model: str = "gpt-5.5",
+    model: str,
     log=print,
 ) -> tuple[FREAKMCQResult | None, FREAKQAResult | None]:
-    mcq_result = await run_mcq_openai(mcq_samples, model=model, log=log) if mcq_samples else None
-    qa_result = await run_qa_openai(qa_samples, model=model, log=log) if qa_samples else None
-    return mcq_result, qa_result
+    async def _run() -> tuple[FREAKMCQResult | None, FREAKQAResult | None]:
+        mcq = await _run_mcq(mcq_samples, model=model, log=log) if mcq_samples else None
+        qa = await _run_qa(qa_samples, model=model, log=log) if qa_samples else None
+        return mcq, qa
+
+    return asyncio.run(_run())
