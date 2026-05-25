@@ -293,7 +293,7 @@ typer.Option(help="Run directly through a vision model: anthropic | openai"),
 
         ts = datetime.utcnow().strftime("%Y%m%dT%H%M%S")
         if output is None:
-output = Path("results") / f"freak_{model_tag}_{ts}.json"
+            output = Path("results") / f"freak_{model_tag}_{ts}.json"
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(json.dumps(report, indent=2, default=str))
         console.print(f"\n[dim]Report saved to {output}[/dim]")
@@ -420,6 +420,67 @@ def _print_qa_result(result: object) -> None:
         f"[bold]Overall QA accuracy: [cyan]{result.accuracy:.1%}[/cyan]  "
         f"Hallucination rate: [red]{result.hallucination_rate:.1%}[/red][/bold]"
     )
+
+
+_GQA_DATA = Path("data/gqa_sample")
+
+
+@app.command()
+def gqa(
+    dataset: Annotated[
+        Path,
+        typer.Option("--dataset", "-d", help="Path to GQA dataset.json"),
+    ] = _GQA_DATA / "dataset.json",
+    models: Annotated[
+        str,
+        typer.Option("--models", "-m", help="Comma-separated models to run: anthropic,openai"),
+    ] = "anthropic,openai",
+    output: Annotated[
+        Path | None,
+        typer.Option("--output", "-o", help="Output Excel file path"),
+    ] = None,
+) -> None:
+    """Run GQA benchmark against vision models and export results to Excel with images."""
+    from .gqa_loader import load_gqa
+    from .gqa_anthropic_runner import run_gqa_anthropic
+    from .gqa_openai_runner import run_gqa_openai
+    from .gqa_excel_export import export_gqa_excel
+
+    if not dataset.exists():
+        console.print(f"[red]Dataset not found: {dataset}[/red]")
+        raise typer.Exit(1)
+
+    samples = load_gqa(dataset)
+    console.print(f"[bold]Loaded [cyan]{len(samples)}[/cyan] GQA samples[/bold]")
+
+    model_list = [m.strip() for m in models.split(",")]
+    anthropic_result = None
+    openai_result = None
+
+    if "anthropic" in model_list:
+        if not settings.anthropic_api_key:
+            console.print("[red]ANTHROPIC_API_KEY is not set in .env[/red]")
+            raise typer.Exit(1)
+        console.print("\n[bold]Running via [cyan]Anthropic Claude (claude-opus-4-7)[/cyan]...[/bold]")
+        anthropic_result = run_gqa_anthropic(samples, log=console.print)
+        console.print(f"[bold]Anthropic accuracy: [cyan]{anthropic_result.accuracy:.1%}[/cyan][/bold]")
+
+    if "openai" in model_list:
+        if not settings.openai_api_key:
+            console.print("[red]OPENAI_API_KEY is not set in .env[/red]")
+            raise typer.Exit(1)
+        console.print("\n[bold]Running via [cyan]OpenAI GPT-5.5[/cyan]...[/bold]")
+        openai_result = run_gqa_openai(samples, log=console.print)
+        console.print(f"[bold]OpenAI accuracy: [cyan]{openai_result.accuracy:.1%}[/cyan][/bold]")
+
+    if output is None:
+        ts = datetime.utcnow().strftime("%Y%m%dT%H%M%S")
+        output = Path("results") / f"gqa_{ts}.xlsx"
+    output.parent.mkdir(parents=True, exist_ok=True)
+
+    console.print(f"\n[bold]Exporting Excel report to [cyan]{output}[/cyan]...[/bold]")
+    export_gqa_excel(anthropic_result, openai_result, output)
+    console.print(f"[green]Done![/green] Saved to {output}")
 
 
 def _print_report(report: object) -> None:
