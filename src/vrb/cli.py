@@ -9,6 +9,7 @@ from rich.console import Console
 from rich.table import Table
 
 from .clients.supermemory import SuperMemoryClient
+from .config import settings
 from .runner import load_test_cases, run_benchmark
 
 app = typer.Typer(name="vrb", help="Visual RAG Benchmark CLI")
@@ -67,6 +68,10 @@ def freak(
         str | None,
         typer.Option(help="Run live against a RAG platform, e.g. supermemory"),
     ] = None,
+    model: Annotated[
+        str | None,
+        typer.Option(help="Run directly through a vision model, e.g. openai"),
+    ] = None,
     mcq_dataset: Annotated[
         Path,
         typer.Option("--mcq", help="Path to dataset.json (MCQ)"),
@@ -99,8 +104,12 @@ def freak(
       vrb freak --predictions my_preds.json
 
     \b
-    Live (upload images to platform → query → check retrieved text):
+    Live RAG platform (upload images → query → check retrieved text):
       vrb freak --platform supermemory
+
+    \b
+    Vision model (send image + question directly to the model):
+      vrb freak --model openai
 
     \b
     Predictions file format (JSON):
@@ -135,8 +144,8 @@ def freak(
         console.print("[red]No dataset loaded. Exiting.[/red]")
         raise typer.Exit(1)
 
-    # Dataset summary — no predictions and no platform
-    if predictions is None and platform is None:
+    # Dataset summary — no predictions, no platform, no model
+    if predictions is None and platform is None and model is None:
         console.print("[bold]FREAK dataset summary[/bold]")
         if mcq_samples:
             console.print(f"  MCQ samples : [cyan]{len(mcq_samples)}[/cyan]")
@@ -145,6 +154,7 @@ def freak(
         console.print(
             "\nEvaluate offline : [bold]vrb freak --predictions <file>[/bold]"
             "\nEvaluate live    : [bold]vrb freak --platform supermemory[/bold]"
+            "\nVision model     : [bold]vrb freak --model openai[/bold]"
         )
         return
 
@@ -210,6 +220,66 @@ def freak(
         ts = datetime.utcnow().strftime("%Y%m%dT%H%M%S")
         if output is None:
             output = Path("results") / f"freak_{platform}_{ts}.json"
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(json.dumps(report, indent=2, default=str))
+        console.print(f"\n[dim]Report saved to {output}[/dim]")
+        return
+
+    # ------------------------------------------------------------------ #
+    # Vision model mode                                                    #
+    # ------------------------------------------------------------------ #
+    if model is not None:
+        from .freak_openai_runner import run_freak_openai
+
+        if model != "openai":
+            console.print(f"[red]Unknown model: {model}. Currently supported: openai[/red]")
+            raise typer.Exit(1)
+
+        if not settings.openai_api_key:
+            console.print("[red]OPENAI_API_KEY is not set in .env[/red]")
+            raise typer.Exit(1)
+
+        console.print(
+            f"[bold]Running FREAK via [cyan]OpenAI GPT-5.5[/cyan] "
+            f"({len(mcq_samples)} MCQ + {len(qa_samples)} QA samples)[/bold]"
+        )
+
+        mcq_result, qa_result = asyncio.run(
+            run_freak_openai(
+                mcq_samples if run_mcq else [],
+                qa_samples if run_qa else [],
+                log=console.print,
+            )
+        )
+
+        if mcq_result:
+            _print_mcq_result(mcq_result)
+            report["mcq"] = {
+                "accuracy": mcq_result.accuracy,
+                "by_category": mcq_result.accuracy_by_category(),
+                "items": [
+                    {"id": r.id, "correct": r.correct, "prediction": r.prediction,
+                     "ground_truth": r.ground_truth}
+                    for r in mcq_result.items
+                ],
+            }
+
+        if qa_result:
+            _print_qa_result(qa_result)
+            report["qa"] = {
+                "accuracy": qa_result.accuracy,
+                "hallucination_rate": qa_result.hallucination_rate,
+                "by_category": qa_result.accuracy_by_category(),
+                "items": [
+                    {"id": r.id, "correct": r.correct, "hallucinated": r.hallucinated,
+                     "prediction": r.prediction, "ground_truth": r.ground_truth}
+                    for r in qa_result.items
+                ],
+            }
+
+        ts = datetime.utcnow().strftime("%Y%m%dT%H%M%S")
+        if output is None:
+            output = Path("results") / f"freak_openai_{ts}.json"
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(json.dumps(report, indent=2, default=str))
         console.print(f"\n[dim]Report saved to {output}[/dim]")
