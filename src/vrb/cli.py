@@ -622,6 +622,140 @@ def gqa(
     console.print(f"[green]Done![/green] Saved to {output}")
 
 
+_FREAK_BENCH_DATA = Path("data/freak")
+
+
+@app.command()
+def freak_bench(
+    mcq_dataset: Annotated[
+        Path,
+        typer.Option("--mcq", help="Path to FREAK MCQ dataset.json"),
+    ] = _FREAK_BENCH_DATA / "dataset.json",
+    qa_dataset: Annotated[
+        Path,
+        typer.Option("--qa", help="Path to FREAK QA dataset_qa.json"),
+    ] = _FREAK_BENCH_DATA / "dataset_qa.json",
+    models: Annotated[
+        str,
+        typer.Option("--models", "-m", help="Comma-separated: anthropic,openai,gemini-pro,gemini-flash,kimi"),
+    ] = "anthropic,openai,gemini-pro,gemini-flash,kimi",
+    output: Annotated[
+        Path | None,
+        typer.Option("--output", "-o", help="Output Excel file path"),
+    ] = None,
+) -> None:
+    """Run FREAK hallucination benchmark across all vision models and export to Excel.
+    Skips any model whose cached results already exist in results/cache/.
+    """
+    from .freak_loader import load_mcq, load_qa
+    from .freak_openrouter_runner import run_freak_openrouter
+    from .freak_evaluator import FREAKMCQResult, FREAKQAResult, MCQItemResult, QAItemResult
+    from .freak_excel_export import export_freak_excel
+
+    mcq_samples = load_mcq(mcq_dataset) if mcq_dataset.exists() else []
+    qa_samples = load_qa(qa_dataset) if qa_dataset.exists() else []
+    console.print(
+        f"[bold]Loaded [cyan]{len(mcq_samples)}[/cyan] MCQ + "
+        f"[cyan]{len(qa_samples)}[/cyan] QA FREAK samples[/bold]"
+    )
+
+    if not settings.openrouter_api_key:
+        console.print("[red]OPENROUTER_API_KEY is not set in .env[/red]")
+        raise typer.Exit(1)
+
+    cache_dir = Path("results/cache")
+    cache_dir.mkdir(parents=True, exist_ok=True)
+
+    def _load_cache_mcq(key: str) -> FREAKMCQResult | None:
+        p = cache_dir / f"freak_mcq_{key}.json"
+        if not p.exists():
+            return None
+        items = [MCQItemResult(**i) for i in json.loads(p.read_text())]
+        r = FREAKMCQResult(); r.items = items
+        return r
+
+    def _load_cache_qa(key: str) -> FREAKQAResult | None:
+        p = cache_dir / f"freak_qa_{key}.json"
+        if not p.exists():
+            return None
+        items = [QAItemResult(**i) for i in json.loads(p.read_text())]
+        r = FREAKQAResult(); r.items = items
+        return r
+
+    def _save_cache(key: str, mcq: FREAKMCQResult | None, qa: FREAKQAResult | None) -> None:
+        import dataclasses
+        if mcq is not None:
+            (cache_dir / f"freak_mcq_{key}.json").write_text(
+                json.dumps([dataclasses.asdict(i) for i in mcq.items], indent=2)
+            )
+        if qa is not None:
+            (cache_dir / f"freak_qa_{key}.json").write_text(
+                json.dumps([dataclasses.asdict(i) for i in qa.items], indent=2)
+            )
+
+    def _run_or_load(key: str, label: str, or_model: str):
+        mcq_cached = _load_cache_mcq(key)
+        qa_cached = _load_cache_qa(key)
+        if mcq_cached is not None and qa_cached is not None:
+            console.print(
+                f"\n[dim]Loaded cached results for [cyan]{label}[/cyan] "
+                f"(MCQ {mcq_cached.accuracy:.1%} / QA {qa_cached.accuracy:.1%})[/dim]"
+            )
+            return mcq_cached, qa_cached
+        console.print(f"\n[bold]Running via [cyan]{label}[/cyan]...[/bold]")
+        mcq_result, qa_result = run_freak_openrouter(
+            mcq_samples, qa_samples, model=or_model, log=console.print
+        )
+        _save_cache(key, mcq_result, qa_result)
+        if mcq_result:
+            console.print(f"  MCQ accuracy: [cyan]{mcq_result.accuracy:.1%}[/cyan]")
+        if qa_result:
+            console.print(f"  QA  accuracy: [cyan]{qa_result.accuracy:.1%}[/cyan]  Hallu: [red]{qa_result.hallucination_rate:.1%}[/red]")
+        return mcq_result, qa_result
+
+    _MODEL_OR_IDS = {
+        "anthropic":    ("anthropic/claude-opus-4.7", "Claude Opus 4.7"),
+        "openai":       ("openai/gpt-5.5",             "GPT-5.5"),
+        "gemini-pro":   ("~google/gemini-pro-latest",  "Gemini 3.1 Pro"),
+        "gemini-flash": ("~google/gemini-flash-latest","Gemini 3.5 Flash"),
+        "kimi":         ("moonshotai/kimi-k2.6",       "Kimi K2.6"),
+    }
+    _CACHE_KEYS = {
+        "anthropic": "anthropic", "openai": "openai",
+        "gemini-pro": "gemini_pro", "gemini-flash": "gemini_flash", "kimi": "kimi",
+    }
+
+    model_list = [m.strip() for m in models.split(",")]
+    results: dict[str, tuple] = {}
+    for m in model_list:
+        if m not in _MODEL_OR_IDS:
+            console.print(f"[yellow]Unknown model '{m}', skipping[/yellow]")
+            continue
+        or_id, label = _MODEL_OR_IDS[m]
+        results[m] = _run_or_load(_CACHE_KEYS[m], label, or_id)
+
+    if output is None:
+        output = Path("results") / "freak_all_models.xlsx"
+    output.parent.mkdir(parents=True, exist_ok=True)
+
+    console.print(f"\n[bold]Exporting Excel report to [cyan]{output}[/cyan]...[/bold]")
+    export_freak_excel(
+        output,
+        mcq_samples, qa_samples,
+        anthropic_mcq=results.get("anthropic", (None, None))[0],
+        openai_mcq=results.get("openai", (None, None))[0],
+        gemini_pro_mcq=results.get("gemini-pro", (None, None))[0],
+        gemini_flash_mcq=results.get("gemini-flash", (None, None))[0],
+        kimi_mcq=results.get("kimi", (None, None))[0],
+        anthropic_qa=results.get("anthropic", (None, None))[1],
+        openai_qa=results.get("openai", (None, None))[1],
+        gemini_pro_qa=results.get("gemini-pro", (None, None))[1],
+        gemini_flash_qa=results.get("gemini-flash", (None, None))[1],
+        kimi_qa=results.get("kimi", (None, None))[1],
+    )
+    console.print(f"[green]Done![/green] Saved to {output}")
+
+
 def _print_report(report: object) -> None:
     from .models import BenchmarkReport
 

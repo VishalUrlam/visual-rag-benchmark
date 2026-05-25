@@ -1,0 +1,106 @@
+[
+  {
+    "id": 502,
+    "question": "How many reel hubs (core wheels) are visible on the tape cassette in the picture?",
+    "ground_truth": "3.",
+    "prediction": "A",
+    "correct": true,
+    "category": "counting"
+  },
+  {
+    "id": 508,
+    "question": "How many goals are there on the far side of the picture?",
+    "ground_truth": "2.",
+    "prediction": "B",
+    "correct": false,
+    "category": "detection"
+  },
+  {
+    "id": 514,
+    "question": "Can the trolley pole/pantograph of the tram be seen in the picture? If yes, where is it located?",
+    "ground_truth": "Not visible / Can't see.",
+    "prediction": "A.",
+    "correct": true,
+    "category": "detection"
+  },
+  {
+    "id": 515,
+    "question": "Where is the projector light being directed in the picture?",
+    "ground_truth": "Right wall and ceiling but NOT screen.",
+    "prediction": "A",
+    "correct": true,
+    "category": [
+      "logic",
+      "position"
+    ]
+  },
+  {
+    "id": 517,
+    "question": "Does the Teapot in the picture have a handle? If so, where is it located?",
+    "ground_truth": "Not visible / Can't see.",
+    "prediction": "",
+    "correct": false,
+    "category": [
+      "detection",
+      "position"
+    ]
+  },
+  {
+    "id": 518,
+    "question": "How many bridge piers/support columns are visible on the distant bridge in the picture?",
+    "ground_truth": "1.",
+    "prediction": "B",
+    "correct": false,
+    "category": "detection"
+  },
+  {
+    "id": 520,
+    "question": "Do the tractor tires in the picture have tread patterns? If so, what kind?",
+    "ground_truth": "Not visible / Can't see. The wheels are smooth.",
+    "prediction": "",
+    "correct": false,
+    "category": "shape"
+  },
+  {
+    "id": 521,
+    "question": "Can the seeds (achenes) be seen on the strawberry in the picture? If visible, what color are they?",
+    "ground_truth": "Not visible / Can't see.",
+    "prediction": "C",
+    "correct": false,
+    "category": "color"
+  },
+  {
+    "id": 525,
+    "question": "Into how many equal slices is the pizza divided in the picture?",
+    "ground_truth": "6.",
+    "prediction": "B",
+    "correct": false,
+    "category": [
+      "shape"
+    ]
+  },
+  {
+    "id": 527,
+    "question": "What do the alpaca's ears look like in the picture?",
+    "ground_truth": "Floppy/drooping.",
+    "prediction": "B",
+    "correct": false,
+    "category": "shape"
+  },
+  {
+    "id": 532,
+    "question": "What is the positional relationship between the two tear lines on the toilet paper roll in the picture?",
+    "ground_truth": "One being horizontal and the other vertical, and they intersect.",
+    "prediction": "A",
+    "correct": true,
+    "category": "logic"
+  },
+  {
+    "id": 533,
+    "question": "How many grille openings are visible on the front fascia of the Jeep in the picture?",
+    "ground_truth": "6.",
+    "prediction": "B",
+    "correct": false,
+    "category": "counting"
+  }
+]

@@ -1,0 +1,115 @@
+[
+  {
+    "id": 1513,
+    "question": "Is a plaque visible on the palace in the image? If so, what color is the plaque?",
+    "ground_truth": "No, a plaque is not visible.",
+    "prediction": "No, there is no plaque visible on the building in the image.",
+    "correct": false,
+    "hallucinated": false,
+    "category": [
+      "detection",
+      "color"
+    ]
+  },
+  {
+    "id": 1529,
+    "question": "What is the name of the restaurant in the distance in the picture?",
+    "ground_truth": "Pizz Hut",
+    "prediction": "The name of the restaurant shown in the distance is \"Pizz Hut.\"",
+    "correct": true,
+    "hallucinated": false,
+    "category": [
+      "ocr"
+    ]
+  },
+  {
+    "id": 1530,
+    "question": "What colors are the police car's lights in the image?",
+    "ground_truth": "Two colors: red and white.",
+    "prediction": "The police car's emergency roof lights are red and white, and its taillights are red.",
+    "correct": false,
+    "hallucinated": false,
+    "category": [
+      "color"
+    ]
+  },
+  {
+    "id": 1533,
+    "question": "In the picture, what color is the central main palace of the Potala Palace in the distance?",
+    "ground_truth": "White.",
+    "prediction": "The central main palace of the Potala Palace (known as the Red Palace) is red.",
+    "correct": false,
+    "hallucinated": false,
+    "category": [
+      "color"
+    ]
+  },
+  {
+    "id": 1539,
+    "question": "What is the exact shape of the candy cane in the image? (Pay attention to whether it is bent)",
+    "ground_truth": "The candy cane is in a stick-like form; it is straight and not bent.",
+    "prediction": "The candy cane in the image is completely straight and does not have the traditional hook or bend at the top.",
+    "correct": false,
+    "hallucinated": false,
+    "category": [
+      "shape"
+    ]
+  },
+  {
+    "id": 1548,
+    "question": "Are there rope barriers connecting the stanchions along the red carpet in the image? If so, what color are the ropes?",
+    "ground_truth": "There are no ropes; only gold-colored stanchions.",
+    "prediction": "No, there are no rope barriers connecting the stanchions along the red carpet in the image.",
+    "correct": false,
+    "hallucinated": false,
+    "category": [
+      "detection",
+      "color"
+    ]
+  },
+  {
+    "id": 1549,
+    "question": "Is the boxing ring in the picture enclosed? Why?",
+    "ground_truth": "No, because the ring only has ropes on two sides; the #two sides closest to the camera do not have ropes#.",
+    "prediction": "Let's look at the main question: \"Is the boxing ring in the picture enclosed? Why?\"\n        *   Is the ring actually enclosed?\n        *   Look at the",
+    "correct": false,
+    "hallucinated": false,
+    "category": [
+      "logic"
+    ]
+  },
+  {
+    "id": 1551,
+    "question": "Is the handle of the door on the right side located away from the door hinge or close to the hinge?",
+    "ground_truth": "Close to the door hinge.",
+    "prediction": "The gold handle on the door is located on the same side (the left edge) as the visible door hinges, making it close to the hinges.",
+    "correct": false,
+    "hallucinated": false,
+    "category": [
+      "logic",
+      "position"
+    ]
+  },
+  {
+    "id": 1552,
+    "question": "What shape are the air holes inside this piece of bread in the image?",
+    "ground_truth": "From this picture, the bread has no air holes and appears dense.",
+    "prediction": "There are no air holes inside this piece of bread, as its inner surface is completely smooth and solid.",
+    "correct": false,
+    "hallucinated": false,
+    "category": [
+      "detection"
+    ]
+  },
+  {
+    "id": 1555,
+    "question": "In the image, can the reflection of the Leifeng Pagoda be seen on the surface of West Lake?",
+    "ground_truth": "The reflection of the Leifeng Pagoda cannot be seen (the reflection has been completely removed/erased).",
+    "prediction": "Yes, the reflection of the Leifeng Pagoda and the hill it stands on can be seen on the surface of West Lake.",
+    "correct": false,
+    "hallucinated": false,
+    "category": [
+      "detection"
+    ]
+  }
+]
