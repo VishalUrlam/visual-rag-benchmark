@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from .seedbench_loader import SEEDBenchSample
+from .loader import SEEDBenchSample
 
 
 @dataclass

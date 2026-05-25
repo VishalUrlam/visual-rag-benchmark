@@ -37,7 +37,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass, field
 
-from .freak_loader import FREAKMCQSample, FREAKQASample
+from .loader import FREAKMCQSample, FREAKQASample
 
 CATEGORIES = ["detection", "counting", "attribute", "analysis", "position", "ocr",
               "color", "shape", "logic"]

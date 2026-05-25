@@ -123,8 +123,8 @@ typer.Option(help="Run directly through a vision model: anthropic | openai"),
     MCQ predictions: full option text ("3.") or letter ("A").
     Omit a split key to skip it.  Run without any flag to inspect the dataset.
     """
-    from .freak_loader import load_mcq, load_qa
-    from .freak_evaluator import evaluate_mcq, evaluate_qa, FREAKMCQResult, FREAKQAResult
+    from .freak.loader import load_mcq, load_qa
+    from .freak.evaluator import evaluate_mcq, evaluate_qa, FREAKMCQResult, FREAKQAResult
 
     run_mcq = mode in ("mcq", "both")
     run_qa = mode in ("qa", "both")
@@ -230,7 +230,7 @@ typer.Option(help="Run directly through a vision model: anthropic | openai"),
     # Vision model mode                                                    #
     # ------------------------------------------------------------------ #
     if model is not None:
-        from .freak_openrouter_runner import run_freak_openrouter
+        from .freak.runner import run_freak_openrouter
         if not settings.openrouter_api_key:
             console.print("[red]OPENROUTER_API_KEY is not set in .env[/red]")
             raise typer.Exit(1)
@@ -376,7 +376,7 @@ def _print_platform_results(
 
 
 def _print_mcq_result(result: object) -> None:
-    from .freak_evaluator import FREAKMCQResult
+    from .freak.evaluator import FREAKMCQResult
     assert isinstance(result, FREAKMCQResult)
 
     table = Table(title="FREAK — Multiple-Choice Results", show_lines=True)
@@ -393,7 +393,7 @@ def _print_mcq_result(result: object) -> None:
 
 
 def _print_qa_result(result: object) -> None:
-    from .freak_evaluator import FREAKQAResult
+    from .freak.evaluator import FREAKQAResult
     assert isinstance(result, FREAKQAResult)
 
     table = Table(title="FREAK — Free-form QA Results", show_lines=True)
@@ -434,10 +434,10 @@ def seedbench(
     """Run SEED-Bench MCQ benchmark against vision models and export results to Excel.
     Skips any model whose cached results already exist in results/cache/.
     """
-    from .seedbench_loader import load_seedbench
-    from .seedbench_openrouter_runner import run_seedbench_openrouter
-    from .seedbench_evaluator import SEEDBenchResult, SEEDBenchItemResult
-    from .seedbench_excel_export import export_seedbench_excel
+    from .seedbench.loader import load_seedbench
+    from .seedbench.runner import run_seedbench_openrouter
+    from .seedbench.evaluator import SEEDBenchResult, SEEDBenchItemResult
+    from .seedbench.excel_export import export_seedbench_excel
 
     if not dataset.exists():
         console.print(f"[red]Dataset not found: {dataset}[/red]")
@@ -537,10 +537,10 @@ def gqa(
     """Run GQA benchmark against vision models and export results to Excel with images.
     Skips any model whose cached results already exist in results/cache/.
     """
-    from .gqa_loader import load_gqa
-    from .gqa_openrouter_runner import run_gqa_openrouter
-    from .gqa_evaluator import GQAResult, GQAItemResult
-    from .gqa_excel_export import export_gqa_excel
+    from .gqa.loader import load_gqa
+    from .gqa.runner import run_gqa_openrouter
+    from .gqa.evaluator import GQAResult, GQAItemResult
+    from .gqa.excel_export import export_gqa_excel
 
     if not dataset.exists():
         console.print(f"[red]Dataset not found: {dataset}[/red]")
@@ -647,10 +647,10 @@ def freak_bench(
     """Run FREAK hallucination benchmark across all vision models and export to Excel.
     Skips any model whose cached results already exist in results/cache/.
     """
-    from .freak_loader import load_mcq, load_qa
-    from .freak_openrouter_runner import run_freak_openrouter
-    from .freak_evaluator import FREAKMCQResult, FREAKQAResult, MCQItemResult, QAItemResult
-    from .freak_excel_export import export_freak_excel
+    from .freak.loader import load_mcq, load_qa
+    from .freak.runner import run_freak_openrouter
+    from .freak.evaluator import FREAKMCQResult, FREAKQAResult, MCQItemResult, QAItemResult
+    from .freak.excel_export import export_freak_excel
 
     mcq_samples = load_mcq(mcq_dataset) if mcq_dataset.exists() else []
     qa_samples = load_qa(qa_dataset) if qa_dataset.exists() else []

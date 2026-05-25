@@ -8,9 +8,9 @@ from pathlib import Path
 
 from openai import AsyncOpenAI
 
-from .config import settings
-from .seedbench_evaluator import SEEDBenchItemResult, SEEDBenchResult, _mcq_match
-from .seedbench_loader import SEEDBenchSample
+from ..config import settings
+from .evaluator import SEEDBenchItemResult, SEEDBenchResult, _mcq_match
+from .loader import SEEDBenchSample
 
 _OPENROUTER_BASE = "https://openrouter.ai/api/v1"
 

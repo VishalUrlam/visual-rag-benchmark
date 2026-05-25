@@ -11,8 +11,8 @@ from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.utils import get_column_letter
 from PIL import Image as PILImage
 
-from .freak_evaluator import FREAKMCQResult, FREAKQAResult, MCQItemResult, QAItemResult
-from .freak_loader import FREAKMCQSample, FREAKQASample
+from .evaluator import FREAKMCQResult, FREAKQAResult, MCQItemResult, QAItemResult
+from .loader import FREAKMCQSample, FREAKQASample
 
 _IMG_W = 120
 _IMG_H = 90

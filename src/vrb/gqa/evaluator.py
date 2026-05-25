@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from .gqa_loader import GQASample
+from .loader import GQASample
 
 
 @dataclass

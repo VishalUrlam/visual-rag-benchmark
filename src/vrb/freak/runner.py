@@ -8,9 +8,9 @@ from pathlib import Path
 
 from openai import AsyncOpenAI
 
-from .config import settings
-from .freak_evaluator import FREAKMCQResult, FREAKQAResult, MCQItemResult, QAItemResult, _mcq_match
-from .freak_loader import FREAKMCQSample, FREAKQASample
+from ..config import settings
+from .evaluator import FREAKMCQResult, FREAKQAResult, MCQItemResult, QAItemResult, _mcq_match
+from .loader import FREAKMCQSample, FREAKQASample
 
 _OPENROUTER_BASE = "https://openrouter.ai/api/v1"
 

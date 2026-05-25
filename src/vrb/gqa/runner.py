@@ -8,9 +8,9 @@ from pathlib import Path
 
 from openai import AsyncOpenAI
 
-from .config import settings
-from .gqa_evaluator import GQAItemResult, GQAResult, _match
-from .gqa_loader import GQASample
+from ..config import settings
+from .evaluator import GQAItemResult, GQAResult, _match
+from .loader import GQASample
 
 _OPENROUTER_BASE = "https://openrouter.ai/api/v1"
 
