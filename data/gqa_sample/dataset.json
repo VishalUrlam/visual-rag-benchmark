@@ -1,0 +1,502 @@
+[
+  {
+    "id": "12785374",
+    "image_id": "2363100",
+    "image_file": "2363100.jpg",
+    "question": "Is the surfer on the right?",
+    "answer": "no",
+    "full_answer": "No, the surfer is on the left of the image.",
+    "category": "attr",
+    "type": "verify"
+  },
+  {
+    "id": "171049258",
+    "image_id": "2349424",
+    "image_file": "2349424.jpg",
+    "question": "What kind of furniture is under the counter?",
+    "answer": "drawer",
+    "full_answer": "The piece of furniture is a drawer.",
+    "category": "rel",
+    "type": "query"
+  },
+  {
+    "id": "11495866",
+    "image_id": "2357407",
+    "image_file": "2357407.jpg",
+    "question": "Are there photographers or customers?",
+    "answer": "no",
+    "full_answer": "No, there are no photographers or customers.",
+    "category": "obj",
+    "type": "logical"
+  },
+  {
+    "id": "08390116",
+    "image_id": "2398518",
+    "image_file": "2398518.jpg",
+    "question": "What is the tree in front of?",
+    "answer": "pole",
+    "full_answer": "The tree is in front of the pole.",
+    "category": "rel",
+    "type": "query"
+  },
+  {
+    "id": "14449650",
+    "image_id": "2328657",
+    "image_file": "2328657.jpg",
+    "question": "What color is the license plate?",
+    "answer": "white",
+    "full_answer": "The license plate is white.",
+    "category": "attr",
+    "type": "query"
+  },
+  {
+    "id": "09564100",
+    "image_id": "2330209",
+    "image_file": "2330209.jpg",
+    "question": "Is the guy on the right side?",
+    "answer": "no",
+    "full_answer": "No, the guy is on the left of the image.",
+    "category": "attr",
+    "type": "verify"
+  },
+  {
+    "id": "12486629",
+    "image_id": "2354599",
+    "image_file": "2354599.jpg",
+    "question": "Is the wine bottle to the left or to the right of the woman?",
+    "answer": "right",
+    "full_answer": "The wine bottle is to the right of the woman.",
+    "category": "rel",
+    "type": "choose"
+  },
+  {
+    "id": "182623",
+    "image_id": "4028",
+    "image_file": "4028.jpg",
+    "question": "Which room is it?",
+    "answer": "office",
+    "full_answer": "It is an office.",
+    "category": "global",
+    "type": "query"
+  },
+  {
+    "id": "00684381",
+    "image_id": "2410733",
+    "image_file": "2410733.jpg",
+    "question": "Is the fridge to the right or to the left of the drawers?",
+    "answer": "right",
+    "full_answer": "The fridge is to the right of the drawers.",
+    "category": "rel",
+    "type": "choose"
+  },
+  {
+    "id": "01681708",
+    "image_id": "2333593",
+    "image_file": "2333593.jpg",
+    "question": "What is the color of the boat in the bottom of the photo?",
+    "answer": "yellow",
+    "full_answer": "The boat is yellow.",
+    "category": "attr",
+    "type": "query"
+  },
+  {
+    "id": "10884205",
+    "image_id": "2333517",
+    "image_file": "2333517.jpg",
+    "question": "Is the surfboard to the right or to the left of the person that is wearing a shirt?",
+    "answer": "left",
+    "full_answer": "The surfboard is to the left of the man.",
+    "category": "rel",
+    "type": "choose"
+  },
+  {
+    "id": "03266845",
+    "image_id": "2353078",
+    "image_file": "2353078.jpg",
+    "question": "Do you see either any large broccoli or lettuce?",
+    "answer": "yes",
+    "full_answer": "Yes, there is large broccoli.",
+    "category": "obj",
+    "type": "logical"
+  },
+  {
+    "id": "03322787",
+    "image_id": "2358081",
+    "image_file": "2358081.jpg",
+    "question": "What bird is to the left of the person that is wearing a shirt?",
+    "answer": "owl",
+    "full_answer": "The bird is an owl.",
+    "category": "rel",
+    "type": "query"
+  },
+  {
+    "id": "14486485",
+    "image_id": "2371387",
+    "image_file": "2371387.jpg",
+    "question": "What fruit is on the tub?",
+    "answer": "apple",
+    "full_answer": "The fruit is an apple.",
+    "category": "rel",
+    "type": "query"
+  },
+  {
+    "id": "19412394",
+    "image_id": "2322655",
+    "image_file": "2322655.jpg",
+    "question": "Are there both grass and mud in this photo?",
+    "answer": "yes",
+    "full_answer": "Yes, there are both mud and grass.",
+    "category": "obj",
+    "type": "logical"
+  },
+  {
+    "id": "02104292",
+    "image_id": "2367554",
+    "image_file": "2367554.jpg",
+    "question": "What kind of vehicle is it?",
+    "answer": "taxi",
+    "full_answer": "The vehicle is a taxi.",
+    "category": "cat",
+    "type": "query"
+  },
+  {
+    "id": "05943689",
+    "image_id": "2412612",
+    "image_file": "2412612.jpg",
+    "question": "Is the green grass in front of a cow?",
+    "answer": "no",
+    "full_answer": "No, the grass is behind a cow.",
+    "category": "rel",
+    "type": "verify"
+  },
+  {
+    "id": "10235591",
+    "image_id": "2361118",
+    "image_file": "2361118.jpg",
+    "question": "Are there rackets to the left of the boy that is hitting the ball?",
+    "answer": "yes",
+    "full_answer": "Yes, there is a racket to the left of the boy.",
+    "category": "rel",
+    "type": "verify"
+  },
+  {
+    "id": "13894593",
+    "image_id": "2345168",
+    "image_file": "2345168.jpg",
+    "question": "Are the glasses on the right side?",
+    "answer": "yes",
+    "full_answer": "Yes, the glasses are on the right of the image.",
+    "category": "attr",
+    "type": "verify"
+  },
+  {
+    "id": "12546359",
+    "image_id": "2329607",
+    "image_file": "2329607.jpg",
+    "question": "What is the color of the skis in the bottom of the picture?",
+    "answer": "black",
+    "full_answer": "The skis are black.",
+    "category": "attr",
+    "type": "query"
+  },
+  {
+    "id": "03665530",
+    "image_id": "2323700",
+    "image_file": "2323700.jpg",
+    "question": "Who is wearing the sweatshirt?",
+    "answer": "boy",
+    "full_answer": "The boy is wearing a sweatshirt.",
+    "category": "rel",
+    "type": "query"
+  },
+  {
+    "id": "19254320",
+    "image_id": "2380556",
+    "image_file": "2380556.jpg",
+    "question": "What does the sign that looks white and blue hang on?",
+    "answer": "pole",
+    "full_answer": "The sign hangs on the pole.",
+    "category": "rel",
+    "type": "query"
+  },
+  {
+    "id": "19501452",
+    "image_id": "2369059",
+    "image_file": "2369059.jpg",
+    "question": "Which kind of clothing is not dirty?",
+    "answer": "hat",
+    "full_answer": "The clothing is a hat.",
+    "category": "cat",
+    "type": "query"
+  },
+  {
+    "id": "05687670",
+    "image_id": "2385305",
+    "image_file": "2385305.jpg",
+    "question": "Is the picture to the left of the curtain the floor is under of?",
+    "answer": "yes",
+    "full_answer": "Yes, the picture is to the left of the curtain.",
+    "category": "rel",
+    "type": "verify"
+  },
+  {
+    "id": "19848538",
+    "image_id": "1160151",
+    "image_file": "1160151.jpg",
+    "question": "Are there frisbees or cans?",
+    "answer": "no",
+    "full_answer": "No, there are no frisbees or cans.",
+    "category": "obj",
+    "type": "logical"
+  },
+  {
+    "id": "11981407",
+    "image_id": "3181",
+    "image_file": "3181.jpg",
+    "question": "Which color does the car to the right of the other car have?",
+    "answer": "blue",
+    "full_answer": "The car has blue color.",
+    "category": "attr",
+    "type": "query"
+  },
+  {
+    "id": "12356615",
+    "image_id": "2355548",
+    "image_file": "2355548.jpg",
+    "question": "Is the woman on the left or on the right side?",
+    "answer": "right",
+    "full_answer": "The woman is on the right of the image.",
+    "category": "attr",
+    "type": "choose"
+  },
+  {
+    "id": "13555843",
+    "image_id": "2393739",
+    "image_file": "2393739.jpg",
+    "question": "Are there both glasses and bottles in the image?",
+    "answer": "yes",
+    "full_answer": "Yes, there are both a bottle and glasses.",
+    "category": "obj",
+    "type": "logical"
+  },
+  {
+    "id": "05516272",
+    "image_id": "2405720",
+    "image_file": "2405720.jpg",
+    "question": "Which place is it?",
+    "answer": "station",
+    "full_answer": "It is a station.",
+    "category": "global",
+    "type": "query"
+  },
+  {
+    "id": "18638776",
+    "image_id": "2331888",
+    "image_file": "2331888.jpg",
+    "question": "How does the hat look like, maroon or tan?",
+    "answer": "maroon",
+    "full_answer": "The hat is maroon.",
+    "category": "attr",
+    "type": "choose"
+  },
+  {
+    "id": "01975202",
+    "image_id": "2327411",
+    "image_file": "2327411.jpg",
+    "question": "Are there ducks in this scene?",
+    "answer": "yes",
+    "full_answer": "Yes, there is a duck.",
+    "category": "obj",
+    "type": "verify"
+  },
+  {
+    "id": "18906866",
+    "image_id": "2364284",
+    "image_file": "2364284.jpg",
+    "question": "What color is the large pipe?",
+    "answer": "yellow",
+    "full_answer": "The pipe is yellow.",
+    "category": "attr",
+    "type": "query"
+  },
+  {
+    "id": "05656519",
+    "image_id": "2409141",
+    "image_file": "2409141.jpg",
+    "question": "Are there either any blue plates or cans in this image?",
+    "answer": "no",
+    "full_answer": "No, there is a plate but it is white.",
+    "category": "obj",
+    "type": "logical"
+  },
+  {
+    "id": "0778365",
+    "image_id": "2361896",
+    "image_file": "2361896.jpg",
+    "question": "Is the tail white?",
+    "answer": "yes",
+    "full_answer": "Yes, the tail is white.",
+    "category": "attr",
+    "type": "verify"
+  },
+  {
+    "id": "03738178",
+    "image_id": "2392548",
+    "image_file": "2392548.jpg",
+    "question": "Is there a giraffe in front of the rocks near the tree?",
+    "answer": "no",
+    "full_answer": "No, there is a zebra in front of the rocks.",
+    "category": "rel",
+    "type": "verify"
+  },
+  {
+    "id": "07257240",
+    "image_id": "2372539",
+    "image_file": "2372539.jpg",
+    "question": "Is the lady to the left of the man holding a peach?",
+    "answer": "no",
+    "full_answer": "No, the lady is holding the orange.",
+    "category": "rel",
+    "type": "verify"
+  },
+  {
+    "id": "011608",
+    "image_id": "150391",
+    "image_file": "150391.jpg",
+    "question": "Is the white bus to the left or to the right of the blue bag?",
+    "answer": "right",
+    "full_answer": "The bus is to the right of the bag.",
+    "category": "rel",
+    "type": "choose"
+  },
+  {
+    "id": "0850872",
+    "image_id": "2397097",
+    "image_file": "2397097.jpg",
+    "question": "Which kind of vehicle is to the left of the person?",
+    "answer": "bus",
+    "full_answer": "The vehicle is a bus.",
+    "category": "rel",
+    "type": "query"
+  },
+  {
+    "id": "1771276",
+    "image_id": "2411252",
+    "image_file": "2411252.jpg",
+    "question": "Where is the traffic light?",
+    "answer": "street",
+    "full_answer": "The traffic light is on the street.",
+    "category": "rel",
+    "type": "query"
+  },
+  {
+    "id": "08359137",
+    "image_id": "2328901",
+    "image_file": "2328901.jpg",
+    "question": "Is the man in the top part of the photo?",
+    "answer": "no",
+    "full_answer": "No, the man is in the bottom of the image.",
+    "category": "attr",
+    "type": "verify"
+  },
+  {
+    "id": "06680067",
+    "image_id": "2319606",
+    "image_file": "2319606.jpg",
+    "question": "Which kind of animal is large?",
+    "answer": "cat",
+    "full_answer": "The animal is a cat.",
+    "category": "cat",
+    "type": "query"
+  },
+  {
+    "id": "16747513",
+    "image_id": "2411203",
+    "image_file": "2411203.jpg",
+    "question": "Where is the man to the right of the person standing on?",
+    "answer": "snow",
+    "full_answer": "The man is standing on the snow.",
+    "category": "rel",
+    "type": "query"
+  },
+  {
+    "id": "04335706",
+    "image_id": "2359424",
+    "image_file": "2359424.jpg",
+    "question": "On which side of the image is the person?",
+    "answer": "right",
+    "full_answer": "The person is on the right of the image.",
+    "category": "attr",
+    "type": "query"
+  },
+  {
+    "id": "13741172",
+    "image_id": "2382560",
+    "image_file": "2382560.jpg",
+    "question": "What type of animal is this, a dog or a cat?",
+    "answer": "cat",
+    "full_answer": "This is a cat.",
+    "category": "cat",
+    "type": "choose"
+  },
+  {
+    "id": "13109191",
+    "image_id": "2334456",
+    "image_file": "2334456.jpg",
+    "question": "Is the backpack to the left or to the right of the train?",
+    "answer": "left",
+    "full_answer": "The backpack is to the left of the train.",
+    "category": "rel",
+    "type": "choose"
+  },
+  {
+    "id": "18727508",
+    "image_id": "2412800",
+    "image_file": "2412800.jpg",
+    "question": "Do you see any white benches or bags?",
+    "answer": "yes",
+    "full_answer": "Yes, there is a white bench.",
+    "category": "obj",
+    "type": "logical"
+  },
+  {
+    "id": "15793187",
+    "image_id": "2374704",
+    "image_file": "2374704.jpg",
+    "question": "Which side of the picture are the French fries on?",
+    "answer": "left",
+    "full_answer": "The French fries are on the left of the image.",
+    "category": "attr",
+    "type": "query"
+  },
+  {
+    "id": "021049471",
+    "image_id": "2394610",
+    "image_file": "2394610.jpg",
+    "question": "Does that shirt have red color?",
+    "answer": "no",
+    "full_answer": "No, the shirt is white.",
+    "category": "attr",
+    "type": "verify"
+  },
+  {
+    "id": "14544196",
+    "image_id": "2340943",
+    "image_file": "2340943.jpg",
+    "question": "The children are wearing what?",
+    "answer": "coats",
+    "full_answer": "The children are wearing coats.",
+    "category": "rel",
+    "type": "query"
+  },
+  {
+    "id": "13931510",
+    "image_id": "2382840",
+    "image_file": "2382840.jpg",
+    "question": "Is there a window in this picture that is not open?",
+    "answer": "yes",
+    "full_answer": "Yes, there is an closed window.",
+    "category": "obj",
+    "type": "verify"
+  }
+]
