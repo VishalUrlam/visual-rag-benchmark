@@ -70,7 +70,7 @@ def freak(
     ] = None,
     model: Annotated[
         str | None,
-        typer.Option(help="Run directly through a vision model: anthropic | openai"),
+typer.Option(help="Run directly through a vision model: anthropic | openai"),
     ] = None,
     mcq_dataset: Annotated[
         Path,
@@ -155,7 +155,7 @@ def freak(
         console.print(
             "\nEvaluate offline : [bold]vrb freak --predictions <file>[/bold]"
             "\nEvaluate live    : [bold]vrb freak --platform supermemory[/bold]"
-            "\nVision model     : [bold]vrb freak --model anthropic[/bold]"
+            "\nVision model     : [bold]vrb freak --model anthropic|openai[/bold]"
         )
         return
 
@@ -245,8 +245,25 @@ def freak(
                 log=console.print,
             )
             model_tag = "anthropic"
+        elif model == "openai":
+            from .freak_openai_runner import run_freak_openai
+            if not settings.openai_api_key:
+                console.print("[red]OPENAI_API_KEY is not set in .env[/red]")
+                raise typer.Exit(1)
+            console.print(
+                f"[bold]Running FREAK via [cyan]OpenAI GPT-5.5[/cyan] "
+                f"({len(mcq_samples)} MCQ + {len(qa_samples)} QA samples)[/bold]"
+            )
+            mcq_result, qa_result = asyncio.run(
+                run_freak_openai(
+                    mcq_samples if run_mcq else [],
+                    qa_samples if run_qa else [],
+                    log=console.print,
+                )
+            )
+            model_tag = "openai"
         else:
-            console.print(f"[red]Unknown model: {model}. Supported: anthropic[/red]")
+            console.print(f"[red]Unknown model: {model}. Supported: anthropic | openai[/red]")
             raise typer.Exit(1)
 
         if mcq_result:
@@ -260,6 +277,7 @@ def freak(
                     for r in mcq_result.items
                 ],
             }
+
         if qa_result:
             _print_qa_result(qa_result)
             report["qa"] = {
@@ -275,7 +293,7 @@ def freak(
 
         ts = datetime.utcnow().strftime("%Y%m%dT%H%M%S")
         if output is None:
-            output = Path("results") / f"freak_{model_tag}_{ts}.json"
+output = Path("results") / f"freak_{model_tag}_{ts}.json"
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(json.dumps(report, indent=2, default=str))
         console.print(f"\n[dim]Report saved to {output}[/dim]")
