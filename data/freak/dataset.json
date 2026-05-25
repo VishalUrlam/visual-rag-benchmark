@@ -1,0 +1,170 @@
+[
+  {
+    "id": 502,
+    "image_path": "0500.jpeg",
+    "question": "How many reel hubs (core wheels) are visible on the tape cassette in the picture?",
+    "item": "Tape",
+    "category": "counting",
+    "options": [
+      "3.",
+      "2.",
+      "1.",
+      "The correct answer is not listed."
+    ],
+    "ground_truth": "3."
+  },
+  {
+    "id": 508,
+    "image_path": "0506.jpeg",
+    "question": "How many goals are there on the far side of the picture?",
+    "item": "Goals",
+    "category": "detection",
+    "options": [
+      "2.",
+      "1.",
+      "0, not visible.",
+      "The correct answer is not listed."
+    ],
+    "ground_truth": "2."
+  },
+  {
+    "id": 514,
+    "image_path": "0511.jpeg",
+    "question": "Can the trolley pole/pantograph of the tram be seen in the picture? If yes, where is it located?",
+    "item": "Tram",
+    "category": "detection",
+    "options": [
+      "Not visible / Can't see.",
+      "Visible on roof front.",
+      "Visible on roof rear.",
+      "The correct answer is not listed."
+    ],
+    "ground_truth": "Not visible / Can't see."
+  },
+  {
+    "id": 515,
+    "image_path": "0512.jpeg",
+    "question": "Where is the projector light being directed in the picture?",
+    "item": "Projector",
+    "category": ["logic","position"],
+    "options": [
+      "Right wall and ceiling but NOT screen.",
+      "Screen.",
+      "The projector is off.",
+      "The correct answer is not listed."
+    ],
+    "ground_truth": "Right wall and ceiling but NOT screen."
+  },
+  {
+    "id": 517,
+    "image_path": "0514.jpeg",
+    "question": "Does the Teapot in the picture have a handle? If so, where is it located?",
+    "item": "Teapot",
+    "category": ["detection","position"],
+    "options": [
+      "Not visible / Can't see.",
+      "Yes, on the side.",
+      "Yes, arched over the top.",
+      "The correct answer is not listed."
+    ],
+    "ground_truth": "Not visible / Can't see."
+  },
+  {
+    "id": 518,
+    "image_path": "0515.jpeg",
+    "question": "How many bridge piers/support columns are visible on the distant bridge in the picture?",
+    "item": "Bridge",
+    "category": "detection",
+    "options": [
+      "1.",
+      "2.",
+      "4.",
+      "The correct answer is not listed."
+    ],
+    "ground_truth": "1."
+  },
+  {
+    "id": 520,
+    "image_path": "0517.jpeg",
+    "question": "Do the tractor tires in the picture have tread patterns? If so, what kind?",
+    "item": "Tractor",
+    "category": "shape",
+    "options": [
+      "Not visible / Can't see. The wheels are smooth.",
+      "Deep lug patterns.",
+      "Diamond-shaped tread.",
+      "The correct answer is not listed."
+    ],
+    "ground_truth": "Not visible / Can't see. The wheels are smooth."
+  },
+  {
+    "id": 521,
+    "image_path": "0518.jpeg",
+    "question": "Can the seeds (achenes) be seen on the strawberry in the picture? If visible, what color are they?",
+    "item": "Strawberry",
+    "category": "color",
+    "options": [
+      "Not visible / Can't see.",
+      "Yes, yellow.",
+      "Yes, dark red.",
+      "The correct answer is not listed."
+    ],
+    "ground_truth": "Not visible / Can't see."
+  },
+  {
+    "id": 525,
+    "image_path": "0523.jpeg",
+    "question": "Into how many equal slices is the pizza divided in the picture?",
+    "item": "Pizza",
+    "category": ["shape"],
+    "options": [
+      "6.",
+      "8.",
+      "12.",
+      "The correct answer is not listed."
+    ],
+    "ground_truth": "6."
+  },
+  {
+    "id": 527,
+    "image_path": "0525.jpeg",
+    "question": "What do the alpaca's ears look like in the picture?",
+    "item": "Alpaca",
+    "category": "shape",
+    "options": [
+      "Floppy/drooping.",
+      "Pointed and upright.",
+      "Ears not visible.",
+      "The correct answer is not listed."
+    ],
+    "ground_truth": "Floppy/drooping."
+  },
+  {
+    "id": 532,
+    "image_path": "0530.jpeg",
+    "question": "What is the positional relationship between the two tear lines on the toilet paper roll in the picture?",
+    "item": "Toilet paper",
+    "category": "logic",
+    "options": [
+      "One being horizontal and the other vertical, and they intersect.",
+      "Parallel horizontal.",
+      "Diagonal crossing.",
+      "The correct answer is not listed."
+    ],
+    "ground_truth": "One being horizontal and the other vertical, and they intersect."
+  },
+  {
+    "id": 533,
+    "image_path": "0531.jpeg",
+    "question": "How many grille openings are visible on the front fascia of the Jeep in the picture?",
+    "item": "Jeep",
+    "category": "counting",
+    "options": [
+      "6.",
+      "7.",
+      "5.",
+      "The correct answer is not listed."
+    ],
+    "ground_truth": "6."
+  }
+]

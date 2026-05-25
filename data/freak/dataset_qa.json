@@ -1,0 +1,115 @@
+[
+  {
+    "id": 1513,
+    "image_path": "1503.jpeg",
+    "question": "Is a plaque visible on the palace in the image? If so, what color is the plaque?",
+    "item": "Hall of Prayer for Good Harvests (Temple of Heaven)",
+    "category": [
+      "detection",
+      "color"
+    ],
+    "ground_truth": "No, a plaque is not visible.",
+    "hallu_answer": "The plaque on the palace is visible in the image; the plaque is gold."
+  },
+  {
+    "id": 1529,
+    "image_path": "1518.jpeg",
+    "question": "What is the name of the restaurant in the distance in the picture?",
+    "item": "Pizza Hut",
+    "category": [
+      "ocr"
+    ],
+    "ground_truth": "Pizz Hut",
+    "hallu_answer": "Pizza Hut"
+  },
+  {
+    "id": 1530,
+    "image_path": "1519.jpeg",
+    "question": "What colors are the police car's lights in the image?",
+    "item": "Police car",
+    "category": [
+      "color"
+    ],
+    "ground_truth": "Two colors: red and white.",
+    "hallu_answer": "Red and blue."
+  },
+  {
+    "id": 1533,
+    "image_path": "1522.jpeg",
+    "question": "In the picture, what color is the central main palace of the Potala Palace in the distance?",
+    "item": "The main palace of the Potala Palace in Tibet",
+    "category": [
+      "color"
+    ],
+    "ground_truth": "White.",
+    "hallu_answer": "Dark red."
+  },
+  {
+    "id": 1539,
+    "image_path": "1528.jpeg",
+    "question": "What is the exact shape of the candy cane in the image? (Pay attention to whether it is bent)",
+    "item": "Candy cane",
+    "category": [
+      "shape"
+    ],
+    "ground_truth": "The candy cane is in a stick-like form; it is straight and not bent.",
+    "hallu_answer": "It forms a hooked (curved) shape."
+  },
+  {
+    "id": 1548,
+    "image_path": "1537.jpeg",
+    "question": "Are there rope barriers connecting the stanchions along the red carpet in the image? If so, what color are the ropes?",
+    "item": "red carpet",
+    "category": [
+      "detection",
+      "color"
+    ],
+    "ground_truth": "There are no ropes; only gold-colored stanchions.",
+    "hallu_answer": "There are ropes, and they are red."
+  },
+  {
+    "id": 1549,
+    "image_path": "1538.jpeg",
+    "question": "Is the boxing ring in the picture enclosed? Why?",
+    "item": "boxing ring",
+    "category": [
+      "logic"
+    ],
+    "ground_truth": "No, because the ring only has ropes on two sides; the #two sides closest to the camera do not have ropes#.",
+    "hallu_answer": "Yes, because there are ropes all around the ring."
+  },
+  {
+    "id": 1551,
+    "image_path": "1540.jpeg",
+    "question": "Is the handle of the door on the right side located away from the door hinge or close to the hinge?",
+    "item": "shoe cabinet",
+    "category": [
+      "logic",
+      "position"
+    ],
+    "ground_truth": "Close to the door hinge.",
+    "hallu_answer": "Away from the door hinge."
+  },
+  {
+    "id": 1552,
+    "image_path": "1541.jpeg",
+    "question": "What shape are the air holes inside this piece of bread in the image?",
+    "item": "bread",
+    "category": [
+      "detection"
+    ],
+    "ground_truth": "From this picture, the bread has no air holes and appears dense.",
+    "hallu_answer": "The air holes are irregular and vary in size, like natural bread holes (non-uniform shapes)."
+  },
+  {
+    "id": 1555,
+    "image_path": "1544.jpeg",
+    "question": "In the image, can the reflection of the Leifeng Pagoda be seen on the surface of West Lake?",
+    "item": "West Lake, Hangzhou",
+    "category": [
+      "detection"
+    ],
+    "ground_truth": "The reflection of the Leifeng Pagoda cannot be seen (the reflection has been completely removed/erased).",
+    "hallu_answer": "The reflection of the Leifeng Pagoda can be seen on the water surface."
+  }
+]

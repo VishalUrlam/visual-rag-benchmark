@@ -1,0 +1,12 @@
+.env
+.venv/
+visual-rag-testing/
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+.pytest_cache/
+results/
+dist/
+*.egg-info/
+.ruff_cache/

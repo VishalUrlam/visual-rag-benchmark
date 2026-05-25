@@ -1,0 +1,21 @@
+# Example test case — replace file_path and facts with your actual content
+- name: "sample_pdf"
+  file_path: "test_files/pdfs/sample.pdf"
+  file_type: "pdf"
+  description: "Verify PDF ingestion and fact retrieval"
+  queries:
+    - query: "What is the main topic of this document?"
+      expected_facts:
+        - "replace this with a real substring from your PDF"
+      should_not_contain:
+        - "content you know is NOT in this file"
+
+- name: "sample_image"
+  file_path: "test_files/images/sample.png"
+  file_type: "image"
+  description: "Verify image OCR and retrieval"
+  queries:
+    - query: "What text appears in this image?"
+      expected_facts:
+        - "replace with expected OCR output"
+      should_not_contain: []
